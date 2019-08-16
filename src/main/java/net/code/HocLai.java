@@ -6,10 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name ="diem")
-public class Diem {
+@Table(name = "hoc_lai")
+public class HocLai {
 
-	private String maSV;
+	private String maSv;
 	private String maMh;
 	private float diemGk;
 	private float diemCk;
@@ -18,11 +18,11 @@ public class Diem {
 	
 	@Column(name = "ma_sv")
 	@Id
-	public String getMaSV() {
-		return maSV;
+	public String getMaSv() {
+		return maSv;
 	}
-	public void setMaSV(String maSV) {
-		this.maSV = maSV;
+	public void setMaSv(String maSv) {
+		this.maSv = maSv;
 	}
 	
 	@Column(name = "ma_mh")
@@ -42,7 +42,7 @@ public class Diem {
 		this.diemGk = diemGk;
 	}
 	
-	@Column(name = "diem_ck")
+	@Column(name="diem_ck")
 	public float getDiemCk() {
 		return diemCk;
 	}
@@ -50,7 +50,7 @@ public class Diem {
 		this.diemCk = diemCk;
 	}
 	
-	@Column(name = "diem_khac")
+	@Column(name ="diem_khac")
 	public float getDiemKhac() {
 		return diemKhac;
 	}
@@ -65,7 +65,6 @@ public class Diem {
 	public void setDiemTong(float diemTong) {
 		this.diemTong = diemTong;
 	}
+	
+	
 }
-	
-	
-	

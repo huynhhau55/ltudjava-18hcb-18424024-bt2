@@ -2,8 +2,6 @@ package net.code;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,35 +9,25 @@ import javax.persistence.Table;
 @Table(name = "thoi_khoa_bieu")
 public class ThoiKhoaBieu {
 
-	private int stt;
 	private String maMh;
 	private String tenMh;
 	private String phongHoc;
-	private String lop;
-	
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public int getStt() {
-		return stt;
-	}
-	public void setStt(int stt) {
-		this.stt = stt;
-	}
 	
 	@Column(name = "ma_mh")
 	@Id
-	public String getMaMH() {
+	public String getMaMh() {
 		return maMh;
 	}
-	public void setMaMH(String maMH) {
-		this.maMh = maMH;
+	public void setMaMh(String maMh) {
+		this.maMh = maMh;
 	}
 	
 	@Column(name = "ten_mh")
-	public String getTenMH() {
+	public String getTenMh() {
 		return tenMh;
 	}
-	public void setTenMH(String tenMH) {
-		this.tenMh = tenMH;
+	public void setTenMh(String tenMh) {
+		this.tenMh = tenMh;
 	}
 	
 	@Column(name = "phong_hoc")
@@ -50,10 +38,5 @@ public class ThoiKhoaBieu {
 		this.phongHoc = phongHoc;
 	}
 	
-	public String getLop() {
-		return lop;
-	}
-	public void setLop(String lop) {
-		this.lop = lop;
-	}
+	
 }
