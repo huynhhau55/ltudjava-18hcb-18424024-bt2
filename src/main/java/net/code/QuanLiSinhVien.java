@@ -1,42 +1,66 @@
 package net.code;
 
-import java.util.HashSet;
-import java.util.Set;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class QuanLiSinhVien {
 
-	private static SessionFactory sessionFactory;
+	 static EntityManagerFactory factory;
+	 static EntityManager entityManager;
 	public static void main(String[] args) {
 		
-		if(sessionFactory == null) {
-			
-		  Configuration configuration = new Configuration().configure();
-		  ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-		  sessionFactory = configuration.buildSessionFactory(serviceRegistry);  
-		  
-		  Session session = sessionFactory.openSession();
-	      session.beginTransaction();
-	      
-	      Lop lop = new Lop("18HCB");
-	      SinhVien sv1 = new SinhVien("18424024","Huỳnh Văn Hậu", "Nam", "18424024","18424024",lop);
-	      SinhVien sv2 = new SinhVien("18424025","Nguyễn Văn A", "Nam", "18424025","18424025",lop);
-	      SinhVien sv3 = new SinhVien("18424026","Trần Văn B", "Nam", "18424026","18424026",lop);
-	      Set<SinhVien> sinhViens = new HashSet<SinhVien>();
-	      sinhViens.add(sv1);
-	      sinhViens.add(sv2);
-	      sinhViens.add(sv3);
-	      
-	      lop.setSinhViens(sinhViens);
-	      session.save(lop);
-	      session.getTransaction().commit();
-	      session.close();  
-		}
+		begin();
+		
+		//create();
+		//update();
+		find();
+		end();
+		
+		
+
 	}
 
+	
+
+	
+	private static void begin() {
+			factory = Persistence.createEntityManagerFactory("quanlisinhvienUnit");
+			entityManager = factory.createEntityManager();
+			entityManager.getTransaction().begin();
+		}
+	private static void create() {
+		DsLop dsLop= new DsLop();
+		dsLop.setMa_sv("18424024");
+		dsLop.setHo_ten("Huỳnh Văn Hậu");
+		dsLop.setGioi_tinh("Nam");
+		dsLop.setCmnd("215360350");
+		dsLop.setLop("18HCB");
+		entityManager.persist(dsLop);
+	}
+	private static void update() {
+		
+		DsLop existLop = new DsLop();
+		existLop.setMa_sv("18424024");
+		existLop.setHo_ten("Nguyễn Văn A");
+		existLop.setGioi_tinh("Nam");
+		existLop.setCmnd("123455678");
+		existLop.setLop("18HCB");
+		entityManager.merge(existLop);	}
+	
+	private static void find() {
+		
+		String primaryKey = "18424024";
+		DsLop lop = entityManager.find(DsLop.class, primaryKey);
+		System.out.println(lop.getMa_sv());
+		System.out.println(lop.getHo_ten());
+		System.out.println(lop.getGioi_tinh());
+		System.out.println(lop.getCmnd());
+		System.out.println(lop.getLop());
+	}
+	private static void end() {
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		factory.close();
+	}
 }
