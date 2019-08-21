@@ -5,14 +5,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "thoi_khoa bieu")
+@Table(name = "thoi_khoa_bieu")
 public class ThoiKb {
 
 	private String ma_mh;
 	private String ten_mh;
 	private String phong_hoc;
 	private String lop;
-	
 	@Id
 	public String getMa_mh() {
 		return ma_mh;
@@ -38,6 +37,6 @@ public class ThoiKb {
 	public void setLop(String lop) {
 		this.lop = lop;
 	}
-	
+
 	
 }

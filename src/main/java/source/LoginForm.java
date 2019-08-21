@@ -11,9 +11,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+
+import net.code.DsLop;
+import net.code.QuanLiSinhVien;
 
 
 public class LoginForm {
@@ -38,13 +40,18 @@ public class LoginForm {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				QuanLiSinhVien.begin();
 				try {
+					
 					LoginForm window = new LoginForm();
 					window.frmLogin.setLocationRelativeTo(null);
 					window.frmLogin.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				
 			}
 		});
 	}
@@ -90,22 +97,15 @@ public class LoginForm {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				String filePath = ".\\Data\\TaiKhoan\\matkhau.csv";
-				boolean flag1 = false;//Bo qua vong lap dau tien vi dong dau la tieu de
-				boolean flag2 = false;//Cho biet den cuoi file ma van chua tim duoc user
-				List<Account> Accounts = Account.readAccounts(filePath);
-					for(Account a : Accounts) {
-						if(flag1 == false) {
-							flag1 = true;
-							continue;
-						}
-					
 						
+					boolean flag2 = false;
 					String uname=textPane_userName.getText();
 					String pass=String.valueOf( passwordField_password.getPassword());
-					
-					if (uname.equals(a.user)&& pass.equals(a.pass)) {
+					QuanLiSinhVien.begin();
+					DsLop lop = new DsLop();
+					lop = QuanLiSinhVien.find(uname,DsLop.class);
+					QuanLiSinhVien.end();
+					if (uname.equals(lop.getMa_sv())&& pass.equals(lop.getMat_khau())) {
 						
 						flag2 = true;
 						frmLogin.setVisible(false);
@@ -116,22 +116,20 @@ public class LoginForm {
 						}
 						else {
 							
-							XemDiemForm xemDiem = new XemDiemForm();
+							/*XemDiemForm xemDiem = new XemDiemForm();
 							xemDiem.getJFrame().setLocationRelativeTo(null);
 							xemDiem.getJFrame().setVisible(true);
-							xemDiem.setlblMSSV(uname);
+							xemDiem.setlblMSSV(uname);*/
+							System.out.println("ok");
 						}
 					}
 					
-				}
 					if (flag2 == false) {
 						JOptionPane.showMessageDialog(frmLogin, "Please, check your account again !");
 						
 					}
 					
-				
-				
-			
+						
 		}
 			});
 		btnLogin.setBounds(10, 392, 109, 37);

@@ -1,6 +1,6 @@
 package source;
 import java.awt.Color;
-//import java.awt.EventQueue;
+import java.awt.EventQueue;
 import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,12 +11,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+
+import net.code.QuanLiSinhVien;
+
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,21 +41,8 @@ public class ThoiKhoaBieuForm {
 		return this.frmThoiKhoaBieu;
 	}
 	
-	public void writeFile(String input, String contain) {
-		
-		try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(input, true), StandardCharsets.UTF_8))){
-				pw.println(contain);
-				pw.close();
-			
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	
-	/*public static void main(String[] args) {
+
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -67,7 +54,7 @@ public class ThoiKhoaBieuForm {
 				}
 			}
 		});
-	}*/
+	}
 
 	/**
 	 * Create the application.
@@ -90,18 +77,19 @@ public class ThoiKhoaBieuForm {
 		btnImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				
+				QuanLiSinhVien.begin();
 				try {
-					JFileChooser chooser = new JFileChooser();
+					JFileChooser chooser = new JFileChooser(".\\Data\\TKB\\");
 					chooser.showOpenDialog(null);
 					File f = chooser.getSelectedFile();
 					String filePath = f.getAbsolutePath();
 					txtDuongDan.setText(filePath);
+					String str = txtDuongDan.getText() ;
+					String str2 = str.substring(str.lastIndexOf("\\")+1);
+					String str3 = str2.substring(0, 5);
 					Path pathToFile = Paths.get(filePath);
 					BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8);
 					List<String[]> elements = new ArrayList<String[]>();
-					String getTKB1 = txtDuongDan.getText();
-					String getTKB2 = getTKB1.substring(getTKB1.lastIndexOf("\\")+1).substring(0, 5);
 					String line = null;
 					boolean flag = false ;
 					while ((line = br.readLine()) != null) {
@@ -123,10 +111,11 @@ public class ThoiKhoaBieuForm {
 					}
 					br.close();
 					String[] columsName = new String[] {
-							"STT","Ma Mon Hoc","Ten Mon Hoc","Phong Hoc"
+							"STT","Mã Môn Học","Tên Môn Học","Phòng Học"
 					};
 					Object[][] content = new Object[elements.size()][4];
 					for(int i = 0; i < elements.size() ; i++) {
+						QuanLiSinhVien.createThoiKB(elements.get(i)[1], elements.get(i)[2], elements.get(i)[3],str3);
 						for (int j = 0; j < 4 ; j++) {
 							
 							content[i][j] = elements.get(i)[j];
@@ -134,7 +123,7 @@ public class ThoiKhoaBieuForm {
 						
 					}
 					table.setModel(new DefaultTableModel(content,columsName));
-					writeFile(fileWriteClass, getTKB2);
+					QuanLiSinhVien.end();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}

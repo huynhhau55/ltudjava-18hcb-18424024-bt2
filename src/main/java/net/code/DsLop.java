@@ -1,5 +1,6 @@
 package net.code;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -13,8 +14,10 @@ public class DsLop {
 	private String gioi_tinh;
 	private String cmnd;
 	private String lop;
+	private String mat_khau;
 	
 	@Id
+	@Column(name = "ma_sv")
 	public String getMa_sv() {
 		return ma_sv;
 	}
@@ -44,6 +47,12 @@ public class DsLop {
 	}
 	public void setLop(String lop) {
 		this.lop = lop;
+	}
+	public String getMat_khau() {
+		return mat_khau;
+	}
+	public void setMat_khau(String mat_khau) {
+		this.mat_khau = mat_khau;
 	}
 	
 }

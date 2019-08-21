@@ -88,7 +88,18 @@ public class MainWindow {
 			}
 		});
 		_import.add(courseList);
-
+		JMenuItem ImPortDsLopMH = new JMenuItem("Import danh sách lớp môn học");
+		ImPortDsLopMH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				ImportDanhSachMonHoc DsLopMH= new ImportDanhSachMonHoc();
+				frmMainWindow.setVisible(false);
+				DsLopMH.getJFrameIpDSMH().setLocationRelativeTo(null);
+				DsLopMH.getJFrameIpDSMH().setVisible(true);
+				
+			}
+		});
+		_import.add(ImPortDsLopMH);
 		JMenuItem pointTable = new JMenuItem("Import bảng điểm");
 		pointTable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

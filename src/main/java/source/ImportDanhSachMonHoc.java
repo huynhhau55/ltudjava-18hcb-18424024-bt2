@@ -9,6 +9,8 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ImportDanhSachMonHoc {
 
@@ -16,9 +18,14 @@ public class ImportDanhSachMonHoc {
 	private JTextField textField;
 	private JTable table;
 
+	
+	public JFrame getJFrameIpDSMH() {
+		return frame;
+	}
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -65,6 +72,14 @@ public class ImportDanhSachMonHoc {
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("QL Lớp MH");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DanhSachLopMonHoc ds = new DanhSachLopMonHoc();
+				frame.setVisible(false);
+				ds.getFrmDsLopMH().setLocationRelativeTo(null);
+				ds.getFrmDsLopMH().setVisible(true);
+			}
+		});
 		btnNewButton_1.setBounds(725, 78, 144, 39);
 		frame.getContentPane().add(btnNewButton_1);
 		
@@ -76,6 +91,15 @@ public class ImportDanhSachMonHoc {
 		scrollPane.setViewportView(table);
 		
 		JButton btnNewButton_2 = new JButton("Quay Lại");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				MainWindow main = new MainWindow();
+				main.getFrmMainWindow().setLocationRelativeTo(null);
+				main.getFrmMainWindow().setVisible(true);
+				
+			}
+		});
 		btnNewButton_2.setBounds(884, 78, 127, 39);
 		frame.getContentPane().add(btnNewButton_2);
 	}

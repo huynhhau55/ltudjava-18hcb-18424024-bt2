@@ -1,22 +1,18 @@
 package source;
-//import java.awt.EventQueue;
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
+
+import net.code.DsLop;
+import net.code.QuanLiSinhVien;
+
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
@@ -25,6 +21,8 @@ import java.awt.event.MouseEvent;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class AddStudentForm {
 
@@ -40,6 +38,9 @@ public class AddStudentForm {
 	private JScrollPane scrollPane;
 	private JComboBox<String> cbbLop;
 	private JLabel lblQunLSinh;
+	private JLabel lblThem;
+	private JLabel lblXoa;
+	private JLabel lblCapNhat;
 	
 
 	/**
@@ -57,7 +58,7 @@ public class AddStudentForm {
 	}
 	
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -69,83 +70,43 @@ public class AddStudentForm {
 				}
 			}
 		});
-	}*/
+	}
 
 	/**
 	 * Create the application.
 	 */
 	public AddStudentForm() {
+		
 		initialize();
+		
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void writeSinhVien(String filePath, List<Student> Students) {
-		
-		try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath),
-				StandardCharsets.UTF_8))) {
-			int stt = 1;
-			boolean flag = false;
-			for (Student sd : Students) {
-
-				if(flag == false) {
-
-					flag = true;
-					pw.println(("STT" + ";" + sd.getstudentID() + ";" + sd.getnameStudent() + ";" + 
-							sd.getgenderStudent() + ";" + sd.getidentityCard() + ";" + sd.getclassRoom() ));
-
-
-				}
-				else {
-					pw.println((Integer.toString(stt++) + ";" + sd.getstudentID() + ";" + sd.getnameStudent() + ";" + 
-							sd.getgenderStudent() + ";" + sd.getidentityCard() + ";" + sd.getclassRoom() ));
-				}
-
-
-			}
-			pw.close();
-			txtCMND.setText("");
-			txtHoTen.setText("");
-			txtMSSV.setText("");
-		
-		}catch(Exception e) {
-			
-			e.printStackTrace();
-			
-		}
-	}
+	
 	private void loadSinhVien() {
-			
-			String filePath = ".\\Data\\Lop\\" + cbbLop.getSelectedItem() + ".csv";
-			Path pathToFile = Paths.get(filePath);
-			try(BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)){
-			List<String[]> elements = new ArrayList<String[]>();
-			String line = null; boolean flag = false;
-			while((line = br.readLine()) != null ) {
-				if(flag == false) {
-					flag = true;
-					continue;
-				}
-				else {
-					
-					String[] spiltted = line.split(";");
-					elements.add(spiltted);
-				}
-			}
-			br.close();
+		try {
+			QuanLiSinhVien.begin();
+			List<DsLop> lop = QuanLiSinhVien.queryGenetic("SELECT d FROM DsLop d WHERE d.lop = '" + cbbLop.getSelectedItem() + "'") ;
+			QuanLiSinhVien.end();
 			String[] columsName = new String[] {
 					"STT","MSSV","Họ Tên","Giới Tính", "CMND", "Lớp"							
 			};
-			Object[][] content = new Object[elements.size()][6];
-			for(int i = 0; i < elements.size(); i++) {
-				for(int j = 0; j < 6; j++) {
-					
-					content[i][j] = elements.get(i)[j];
-				}
+			Object[][] content = new Object[lop.size()][6];
+			int stt = 1;
+			for(int i = 0; i < lop.size(); i++) {
+				
+				content[i][0] = stt++;
+				content[i][1] = lop.get(i).getMa_sv();
+				content[i][2] = lop.get(i).getHo_ten();
+				content[i][3] = lop.get(i).getGioi_tinh();
+				content[i][4] = lop.get(i).getCmnd();
+				content[i][5] = lop.get(i).getLop();
+				
 			}
 			table.setModel(new DefaultTableModel(content,columsName));
-		}catch (Exception e2) {
+	}catch (Exception e2) {
 			
 			e2.printStackTrace();
 			
@@ -155,6 +116,30 @@ public class AddStudentForm {
 	}
 	private void initialize() {
 		frmAddSd = new JFrame();
+		frmAddSd.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				
+				try {
+					QuanLiSinhVien.begin();
+					List <String> lop =QuanLiSinhVien.query();
+					QuanLiSinhVien.end();
+					int size = lop.size();
+					for (int i = 0; i < size; i++) {
+						getCbbLop().addItem(lop.get(i));
+					}
+					
+					
+				}
+				catch(Exception e3)
+				{
+					e3.printStackTrace();
+				}
+				
+				
+				
+			}
+		});
 		frmAddSd.setTitle("Qu\u1EA3n l\u00FD sinh vi\u00EAn");
 		frmAddSd.setBounds(100, 100, 1107, 660);
 		frmAddSd.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -207,29 +192,27 @@ public class AddStudentForm {
 		btnThem = new JButton("Th\u00EAm");
 		btnThem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lblXoa.setText(null);
+				lblCapNhat.setText(null);
+				boolean flag = false;
+				try {
 					
-					String filePath = ".\\Data\\Lop\\" + cbbLop.getSelectedItem().toString() + ".csv";
-					List<Student> Students = Student.readStudents(filePath);
-					String stt = Integer.toString(Students.size());
-					String gioiTinh = String.valueOf(cbbGioiTinh.getSelectedItem());
-					Student sd = new Student(stt, txtMSSV.getText(), txtHoTen.getText(), 
-										gioiTinh,txtCMND.getText() , cbbLop.getSelectedItem().toString());
-					try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath,true),StandardCharsets.UTF_8))){
-					pw.println(sd.getsttStudent() + ";" + sd.getstudentID() + ";" + sd.getnameStudent() + ";" + 
-							   sd.getgenderStudent() + ";" + sd.getidentityCard() + ";" + sd.getclassRoom() );
-					
-					pw.close();
+					QuanLiSinhVien.begin();
+					QuanLiSinhVien.createDSLop(txtMSSV.getText(), txtHoTen.getText(), cbbGioiTinh.getSelectedItem().toString(), txtCMND.getText(), cbbLop.getSelectedItem().toString());
+					QuanLiSinhVien.end();
+				}catch (Exception ioe) {
+					flag = true;
+					JOptionPane.showMessageDialog(null, "Đã tồn tại sinh viên");
+					ioe.printStackTrace();
+				}
 					loadSinhVien();
 					txtCMND.setText("");
 					txtHoTen.setText("");
 					txtMSSV.setText("");
+					if(flag == false) {
+						lblThem.setText("Đã thêm thành công");
+					}
 						
-				}
-				catch(Exception ioe) {
-					
-					ioe.printStackTrace();
-				}	
-				
 			}
 		});
 		btnThem.setBounds(131, 158, 156, 43);
@@ -243,14 +226,13 @@ public class AddStudentForm {
 				GiaoVuForm giaovu = new GiaoVuForm();
 				giaovu.getFrmGiaoVu().setLocationRelativeTo(null);
 				giaovu.getFrmGiaoVu().setVisible(true);
-				
 			}
 		});
 		btnQuayLai.setBounds(799, 158, 146, 43);
 		frmAddSd.getContentPane().add(btnQuayLai);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(15, 217, 1055, 371);
+		scrollPane.setBounds(15, 243, 1055, 345);
 		frmAddSd.getContentPane().add(scrollPane);
 		
 	
@@ -272,61 +254,25 @@ public class AddStudentForm {
 		});
 		scrollPane.setViewportView(table);
 		
-		JButton btnXoa = new JButton("X\u00F3a");
+		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				lblThem.setText(null);
+				lblCapNhat.setText(null);
+				boolean flag = false;
+				String maSV= txtMSSV.getText().toString();
+				QuanLiSinhVien.removeStudent(maSV);
 				
-				try {
-					String filePath = ".\\Data\\Lop\\" + cbbLop.getSelectedItem() + ".csv";
-					//String filePath = "18HCB.csv";
-					List<Student> Students = Student.readStudents(filePath);
-					for (Student sd : Students) {
-						
-						if( txtMSSV.getText().equalsIgnoreCase(sd.getstudentID()) ) 
-							{
-							
-							Students.remove(sd);
-							break;
-							
-						}
-						
-					}
-					try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath),
-																			StandardCharsets.UTF_8))) {
-						int stt = 1;
-						boolean flag = false;
-						for (Student sd : Students) {
-							
-							if(flag == false) {
-								
-								flag = true;
-								pw.println(("STT" + ";" + sd.getstudentID() + ";" + sd.getnameStudent() + ";" + 
-										   sd.getgenderStudent() + ";" + sd.getidentityCard() + ";" + sd.getclassRoom() ));
-							
-								
-							}
-							else {
-								pw.println((Integer.toString(stt++) + ";" + sd.getstudentID() + ";" + sd.getnameStudent() + ";" + 
-										   sd.getgenderStudent() + ";" + sd.getidentityCard() + ";" + sd.getclassRoom() ));
-							}
-							
-							
-						}
-						pw.close();
-						loadSinhVien();
-						txtCMND.setText("");
-						txtHoTen.setText("");
-						txtMSSV.setText("");
-					}catch(Exception e) {
-						e.printStackTrace();
-					}
-					
-					
+					//flag = true;
+					//OptionPane.showMessageDialog(frmAddSd, "Sinh viên không tồn tại !");
+					//e.printStackTrace();
+				//loadSinhVien();
+				txtCMND.setText("");
+				txtHoTen.setText("");
+				txtMSSV.setText("");
+				if(flag == false) {
+					lblXoa.setText("Đã xóa thành công");
 				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
-				
 				
 			}
 		});
@@ -336,27 +282,29 @@ public class AddStudentForm {
 		JButton btnCapNhat = new JButton("C\u1EADp nh\u1EADt");
 		btnCapNhat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				String filePath = ".\\Data\\Lop\\" + cbbLop.getSelectedItem() + ".csv";
-				List<Student> Students = Student.readStudents(filePath);
-				for (Student s : Students) {
-					
-					if(txtMSSV.getText().equalsIgnoreCase(s.getstudentID())) {
-						s.setnameStudent(txtHoTen.getText());
-						s.setidentityCard(txtCMND.getText());
-						s.setgenderStudent(cbbGioiTinh.getSelectedItem().toString());
-						break;
-					}
+				boolean flag = false;
+				try {
+					lblThem.setText(null);
+					lblXoa.setText(null);
+					QuanLiSinhVien.begin();
+					QuanLiSinhVien.update(txtMSSV.getText(), txtHoTen.getText(), cbbGioiTinh.getSelectedItem().toString(), txtCMND.getText(), cbbLop.getSelectedItem().toString());
+					QuanLiSinhVien.end();
+					loadSinhVien();
+				}catch(Exception e) {
+					flag = true;
+					JOptionPane.showMessageDialog(frmAddSd, "Kiểm tra lại");
+					e.printStackTrace();
 				}
-				writeSinhVien(filePath, Students);
-				loadSinhVien();
-				
+				if(flag == false) {
+					lblCapNhat.setText("Đã cập nhật thành công");
+				}
 			}
 		});
 		btnCapNhat.setBounds(584, 158, 156, 43);
 		frmAddSd.getContentPane().add(btnCapNhat);
 		
 		cbbLop = new JComboBox<String>();
+		cbbLop.setEditable(true);
 		cbbLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -373,7 +321,28 @@ public class AddStudentForm {
 		lblQunLSinh.setForeground(Color.RED);
 		lblQunLSinh.setBounds(337, 0, 376, 59);
 		frmAddSd.getContentPane().add(lblQunLSinh);
-	
+		
+		lblThem = new JLabel("");
+		lblThem.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblThem.setForeground(new Color(255, 0, 0));
+		lblThem.setHorizontalAlignment(SwingConstants.CENTER);
+		lblThem.setBounds(113, 203, 186, 43);
+		frmAddSd.getContentPane().add(lblThem);
+		
+		lblXoa = new JLabel("");
+		lblXoa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblXoa.setForeground(Color.RED);
+		lblXoa.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblXoa.setBounds(347, 203, 186, 43);
+		frmAddSd.getContentPane().add(lblXoa);
+		
+		lblCapNhat = new JLabel("");
+		lblCapNhat.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCapNhat.setForeground(Color.RED);
+		lblCapNhat.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblCapNhat.setBounds(561, 203, 202, 43);
+		frmAddSd.getContentPane().add(lblCapNhat);
+		
 		
 	}
 }

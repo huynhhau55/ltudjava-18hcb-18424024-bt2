@@ -11,6 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import net.code.QuanLiSinhVien;
+
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -29,7 +32,6 @@ public class GiaoVuForm {
 	private JLabel lblImportVaoDanh;
 	private JScrollPane scrollPane;
 	private JButton btnQLSV;
-	private String fileWriteClass = ".\\Data\\Lop\\CacLopHienCo.csv";
 	
 	
 
@@ -41,16 +43,6 @@ public class GiaoVuForm {
 		return this.frmGiaoVu;
 	}
 	
-	public void writeFile(String input, String contain) {
-		
-		try ( PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(input,true),StandardCharsets.UTF_8))) {
-				pw.println(contain);
-				pw.close();
-			
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
 	
 	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -77,6 +69,7 @@ public class GiaoVuForm {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		QuanLiSinhVien.begin();
 		frmGiaoVu = new JFrame();
 		frmGiaoVu.setTitle("Danh Sach Lop");
 		frmGiaoVu.setBounds(100, 100, 1107, 660);
@@ -86,14 +79,13 @@ public class GiaoVuForm {
 		JButton btnImport = new JButton("Import");
 		btnImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+					
+					
 					JFileChooser chooser = new JFileChooser();
 					chooser.showOpenDialog(null);
 					File f = chooser.getSelectedFile() ;
 					String fileName = f.getAbsolutePath();
 					txtDuongDan.setText(fileName);
-					String getClass1 = txtDuongDan.getText();
-					String getClass2 = getClass1.substring(getClass1.lastIndexOf("\\") +1 ).substring(0,5);
 					Path pathToFile = Paths.get(fileName);
 					try (BufferedReader br  = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)){
 					List<String[]> elements = new ArrayList<String[]>();
@@ -124,8 +116,10 @@ public class GiaoVuForm {
 						};
 					
 					Object[][] content = new Object[elements.size()][6];
+					
 					for (int i = 0; i < elements.size(); i++) {
-						writeFile(".\\Data\\TaiKhoan\\matkhau.csv", elements.get(i)[1] + ";" + elements.get(i)[1]);
+						QuanLiSinhVien.createDSLop(elements.get(i)[1], elements.get(i)[2],
+								elements.get(i)[3],elements.get(i)[4], elements.get(i)[5]);
 						for (int j = 0; j < 6; j++) {
 							
 							content[i][j] = elements.get(i)[j];
@@ -134,11 +128,11 @@ public class GiaoVuForm {
 						
 					}
 					table.setModel(new DefaultTableModel(content,columsName));
-					writeFile(fileWriteClass, getClass2);
-					
+					QuanLiSinhVien.end();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
+				
 			}
 		});
 		btnImport.setBounds(74, 78, 127, 39);
@@ -181,26 +175,16 @@ public class GiaoVuForm {
 		btnQLSV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					
 					frmGiaoVu.setVisible(false);
 					AddStudentForm studentForm = new AddStudentForm();
 					studentForm.getFrmAddSd().setLocationRelativeTo(null);
 					studentForm.getFrmAddSd().setVisible(true);
-					Path pathToFile = Paths.get(fileWriteClass);
-					BufferedReader br = Files.newBufferedReader(pathToFile,StandardCharsets.UTF_8);
-					String line = br.readLine();	
-					while(line != null) {
-						studentForm.getCbbLop().addItem(line);
-						line = br.readLine();
-					}
-					br.close();
 				}
 				catch(Exception e3)
 				{
 					e3.printStackTrace();
 				}
-				
-				
-				
 			}
 		});
 		btnQLSV.setBounds(703, 78, 127, 39);

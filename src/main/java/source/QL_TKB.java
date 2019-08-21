@@ -1,5 +1,5 @@
 package source;
-//import java.awt.EventQueue;
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -8,23 +8,24 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+
+import net.code.QuanLiSinhVien;
+import net.code.ThoiKb;
+
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class QL_TKB {
 
@@ -52,45 +53,26 @@ public class QL_TKB {
 	}
 	
 	private void loadTKB() {
-		
 		try {
-			
-			String filePath = ".\\Data\\TKB\\" + cbbLop.getSelectedItem().toString() + ".csv";
-			Path pathTofile = Paths.get(filePath);
-			BufferedReader br = Files.newBufferedReader(pathTofile, StandardCharsets.UTF_8);
-			List<String[]> elements = new ArrayList<String[]>();
-			String line = null; boolean flag = false;
-			while((line = br.readLine()) != null ) {
-				if(flag == false) {
-					flag = true;
-					continue;
-				}
-				else {
-					
-					String[] spiltted = line.split(";");
-					elements.add(spiltted);
-				}
-			}
-			br.close();
+			QuanLiSinhVien.begin();
+			List<ThoiKb> tkb = QuanLiSinhVien.queryTKB("SELECT t FROM ThoiKb t WHERE t.lop ='" + cbbLop.getSelectedItem().toString() +"'") ;
+			QuanLiSinhVien.end();	
+				
 			String[] columsName = new String[] {
-					"STT","Mã Môn Học","Tên Môn Học","Phòng Học", "Lớp"							
-			};
-			Object[][] content = new Object[elements.size()][5];
-			for(int i = 0; i < elements.size(); i++) {
-				for(int j = 0; j < 5; j++) {
-					if( j == 4) {
-						
-						content[i][j] = cbbLop.getSelectedItem();
-						
-					}
-					else {
-						
-						content[i][j] = elements.get(i)[j];
-						
-					}
+						"STT","Mã Môn Học","Tên Môn Học","Phòng Học", "Lớp"							
+				};
+				Object[][] content = new Object[tkb.size()][5];
+				int stt = 1;
+				for(int i = 0; i < tkb.size(); i++) {
+							
+					content[i][0] = stt++;
+					content[i][1] = tkb.get(i).getMa_mh();
+					content[i][2] = tkb.get(i).getTen_mh();
+					content[i][3] = tkb.get(i).getPhong_hoc();
+					content[i][4] = tkb.get(i).getLop();			
 				}
-			}
-			table.setModel(new DefaultTableModel(content,columsName));
+				table.setModel(new DefaultTableModel(content,columsName));
+				
 		}catch (Exception e2) {
 			
 			e2.printStackTrace();
@@ -100,7 +82,7 @@ public class QL_TKB {
 		
 	}
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -112,7 +94,7 @@ public class QL_TKB {
 				}
 			}
 		});
-	}*/
+	}
 
 	/**
 	 * Create the application.
@@ -126,6 +108,20 @@ public class QL_TKB {
 	 */
 	private void initialize() {
 		frmQL_TKB = new JFrame();
+		frmQL_TKB.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				
+				QuanLiSinhVien.begin();
+				List<String> tkb = QuanLiSinhVien.query();
+				for (int i = 0 ; i < tkb.size(); i++) {
+					cbbLop.addItem(tkb.get(i));
+				}
+				QuanLiSinhVien.end();
+				
+				
+			}
+		});
 		frmQL_TKB.setTitle("QL TKB");
 		frmQL_TKB.setBounds(100, 100, 1107, 660);
 		frmQL_TKB.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

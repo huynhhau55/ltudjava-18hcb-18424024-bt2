@@ -6,13 +6,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
+
+import net.code.DsLop;
+import net.code.QuanLiSinhVien;
 
 public class ChangePasswordForm {
 
@@ -26,26 +24,6 @@ public class ChangePasswordForm {
 	 * Launch the application.
 	 */
 	
-	public static void editRecord(String filePath, List<Account> Accounts) {
-		
-		try {
-			
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath),StandardCharsets.UTF_8));
-			int i =Accounts.size();
-			for(Account a : Accounts ) {
-				if(--i == 0 ){ 
-					pw.print(a.user + ";" + a.pass );
-				}
-				else {
-					pw.println(a.user + ";" + a.pass );
-				}
-				
-			}
-			pw.close();
-		} catch (Exception e) {
-			System.out.printf("That bai");
-		}	
-	}
 	
 	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -135,32 +113,21 @@ public class ChangePasswordForm {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				boolean flag1 = false;//Bo qua vong lap dau tien vi dong dau la tieu de
-				boolean flag2 = false;//Cho biet den cuoi file ma van chua tim duoc user
-				String filePath = ".\\Data\\TaiKhoan\\matkhau.csv" ;
-				List<Account> Accounts = Account.readAccounts(filePath);
-			
+				boolean flag2 = false;
 				String uname = txtUsername.getText();
 				String passOld = String.valueOf(passwOld.getPassword()) ;
 				String passNew = String.valueOf(passwNew.getPassword());
 				String passConf = String.valueOf(passwConf.getPassword());
-				
-				for(Account a : Accounts) {
-						
-					if(flag1 == false) {
-							flag1 = true;
-							continue;
-						}
-						
-					if ((uname.equals(a.user) && passOld.equals(a.pass)) && 
+				QuanLiSinhVien.begin();
+				DsLop lop = new DsLop();
+				lop = QuanLiSinhVien.find(uname, DsLop.class);
+					if ((uname.equals(lop.getMa_sv()) && passOld.equals(lop.getMat_khau())) && 
 							(!(passNew.isEmpty()) && (!(passConf.isEmpty()) && 
 							 (passNew.equals(passConf))))){
-						a.pass = passNew;
+						QuanLiSinhVien.changePassword(uname, passNew);
 						flag2 = true;
-						break;
 					}
 					
-				}
 				if (flag2 == false) {
 					
 					JOptionPane.showMessageDialog(frmChangePassword, "Wrong !");
@@ -168,13 +135,12 @@ public class ChangePasswordForm {
 					
 				}
 				
-				editRecord(filePath,Accounts);
 				txtUsername.setText("");
 				passwOld.setText("");
 				passwNew.setText("");
 				passwConf.setText("");
-				
-				JOptionPane.showMessageDialog(frmChangePassword,"Th�nh c�ng");
+				JOptionPane.showMessageDialog(frmChangePassword,"Thành công");
+				QuanLiSinhVien.end();
 					
 			}
 		});

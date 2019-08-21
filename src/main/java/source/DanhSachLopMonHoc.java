@@ -22,6 +22,11 @@ public class DanhSachLopMonHoc {
 	private JTextField txtCMND;
 	private JTable table;
 
+	
+	public JFrame getFrmDsLopMH() {
+		
+		return frame;
+	}
 	/**
 	 * Launch the application.
 	 */
