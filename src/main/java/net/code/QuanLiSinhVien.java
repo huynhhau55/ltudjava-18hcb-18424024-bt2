@@ -149,21 +149,22 @@ public class QuanLiSinhVien {
 	
 	//BẮT ĐẦU -- QUẢN LÝ DANH SÁCH LỚP MÔN HỌC
 	
-	public static void createDanhSachLopMH(String ma_sv, String ho_ten, String gioi_tinh, String cmnd,String lop_mh, String ma_mh ) {
+	public static void createDanhSachLopMH(int stt, String ma_sv, String ho_ten, String gioi_tinh, String cmnd,String lop_mh, String ma_mh ) {
 		
 		DsLopMh lopMH = new DsLopMh();
-		lopMH.setMa_sv(ma_sv);
+		lopMH.setStt(stt);
 		lopMH.setHo_ten(ho_ten);
 		lopMH.setGioi_tinh(gioi_tinh);
 		lopMH.setCmnd(cmnd);
 		lopMH.setLop_mh(lop_mh);
+		lopMH.setMa_sv(ma_sv);
 		lopMH.setMa_mh(ma_mh);
 		entityManager.persist(lopMH);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<String> getLopMhAndMaMH(){
-		String sql = "SELECT distinct t.lop_mh, t.ma_mh FROM ThoiKb t";
+	public static List<ThoiKb> getLopMhAndMaMH(){
+		String sql = "SELECT t FROM ThoiKb t";
 		Query query = entityManager.createQuery(sql);
 		return query.getResultList();
 	}
@@ -174,7 +175,12 @@ public class QuanLiSinhVien {
 		return tkb.getTen_mh();
 			
 	}
-	
+	@SuppressWarnings("unchecked")
+	public static List<DsLopMh> loadDsLMH(String sql){
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();							
+				
+	}
 	//KẾT THÚC -- QUẢN LÝ DANH SÁCH LỚP MÔN HỌC
 	
 	//BẮT ĐẦU -- QUẢN LÝ ĐIỂM

@@ -30,6 +30,7 @@ public class ImportDanhSachMonHoc {
 	private JFrame frame;
 	private JTextField txtDuongDan;
 	private JTable table;
+	private int sttDSMH = 1;
 
 	
 	public JFrame getJFrameIpDSMH() {
@@ -84,6 +85,7 @@ public class ImportDanhSachMonHoc {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
+				QuanLiSinhVien.begin();
 				JFileChooser chooser = new JFileChooser(".\\Data\\DanhSachLopTungMonHoc\\");
 				chooser.showOpenDialog(null);
 				File f = chooser.getSelectedFile();
@@ -114,16 +116,18 @@ public class ImportDanhSachMonHoc {
 					br.close();
 					String[] columsName = new String[] {
 							
-							"STT", "MSSV", "Họ Tên", "Giới Tính", "CMND", "Lớp Môn Học"
+							"STT", "MSSV", "Họ Tên", "Giới Tính", "CMND", "Lớp Môn Học", "Mã Môn Học"
 							
 						};
 					
-					Object[][] content = new Object[elements.size()][6];
+					Object[][] content = new Object[elements.size()][7];
 					
 					for (int i = 0; i < elements.size(); i++) {
-						QuanLiSinhVien.createDanhSachLopMH(elements.get(i)[1], elements.get(i)[2],
-								elements.get(i)[3],elements.get(i)[4], elements.get(i)[5],elements.get(i)[6]);
-						for (int j = 0; j < 6; j++) {
+						//sttDSMH = Integer.parseInt(elements.get(i)[0].toString());
+						QuanLiSinhVien.createDanhSachLopMH(sttDSMH++,elements.get(i)[1], elements.get(i)[2], elements.get(i)[3],elements.get(i)[4], 
+															elements.get(i)[5],elements.get(i)[6]);
+						
+						for (int j = 0; j < 7; j++) {
 							
 							content[i][j] = elements.get(i)[j];
 							

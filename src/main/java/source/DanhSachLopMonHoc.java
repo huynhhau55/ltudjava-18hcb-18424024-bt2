@@ -8,9 +8,11 @@ import javax.swing.JTable;
 import javax.swing.JComboBox;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import net.code.QuanLiSinhVien;
-
+import net.code.ThoiKb;
+import net.code.DsLopMh;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -27,6 +29,7 @@ public class DanhSachLopMonHoc {
 	private JTextField txtGioiTinh;
 	private JTextField txtCMND;
 	private JTable table;
+	private JComboBox<String> cbbLop;
 
 	
 	public JFrame getFrmDsLopMH() {
@@ -53,6 +56,38 @@ public class DanhSachLopMonHoc {
 	/**
 	 * Create the application.
 	 */
+	void loadDanhSachLopMH() {
+		try {
+			String cbb = cbbLop.getSelectedItem().toString();
+			String[] split = cbb.split("-");
+			String lop_mh = split[0].replace(" ", "");
+			String ma_mh = split[1].replace(" ", "");
+			QuanLiSinhVien.begin();
+			List<DsLopMh> ds = QuanLiSinhVien.loadDsLMH("SELECT d FROM DsLopMh d WHERE d.lop_mh = '"+ lop_mh + "'"+" AND d.ma_mh = '" + ma_mh +"'");
+			QuanLiSinhVien.end();
+			String[] columsName = new String[] {
+					"STT","MSSV","Họ Tên","Giới Tính", "CMND","Mã Môn Học", "Lớp Môn Học"							
+			};
+			Object[][] content = new Object[ds.size()][7];
+			int stt = 1;
+			for(int i = 0; i < ds.size(); i++) {
+				
+				content[i][0] = stt++;
+				content[i][1] = ds.get(i).getMa_sv();
+				content[i][2] = ds.get(i).getHo_ten();
+				content[i][3] = ds.get(i).getGioi_tinh();
+				content[i][4] = ds.get(i).getCmnd();
+				content[i][5] = ds.get(i).getMa_mh();
+				content[i][6] = ds.get(i).getLop_mh();
+				
+			}
+			table.setModel(new DefaultTableModel(content,columsName));
+		}catch(Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
 	public DanhSachLopMonHoc() {
 		initialize();
 	}
@@ -65,7 +100,14 @@ public class DanhSachLopMonHoc {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent arg0) {
-				
+				String tencbb = null;
+				QuanLiSinhVien.begin();
+				List<ThoiKb> LopMH = QuanLiSinhVien.getLopMhAndMaMH();
+				for(int i = 0 ; i < LopMH.size() ; i++) {
+					tencbb = LopMH.get(i).getLop().toString() +" - "+ LopMH.get(i).getMa_mh().toString() + " - " + LopMH.get(i).getTen_mh().toString();
+					cbbLop.addItem(tencbb);
+				}
+				QuanLiSinhVien.end();
 				
 			}
 		});
@@ -78,7 +120,7 @@ public class DanhSachLopMonHoc {
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Họ Tên");
-		lblNewLabel_1.setBounds(429, 66, 69, 26);
+		lblNewLabel_1.setBounds(429, 102, 69, 26);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		txtMSSV = new JTextField();
@@ -87,20 +129,20 @@ public class DanhSachLopMonHoc {
 		txtMSSV.setColumns(10);
 		
 		txtHoTen = new JTextField();
-		txtHoTen.setBounds(527, 66, 146, 26);
+		txtHoTen.setBounds(527, 102, 146, 26);
 		frame.getContentPane().add(txtHoTen);
 		txtHoTen.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Giới Tính");
-		lblNewLabel_2.setBounds(429, 108, 69, 20);
+		lblNewLabel_2.setBounds(725, 105, 69, 20);
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("CMND");
-		lblNewLabel_3.setBounds(753, 69, 69, 20);
+		lblNewLabel_3.setBounds(725, 69, 69, 20);
 		frame.getContentPane().add(lblNewLabel_3);
 		
 		txtGioiTinh = new JTextField();
-		txtGioiTinh.setBounds(527, 105, 146, 26);
+		txtGioiTinh.setBounds(823, 102, 146, 26);
 		frame.getContentPane().add(txtGioiTinh);
 		txtGioiTinh.setColumns(10);
 		
@@ -109,12 +151,12 @@ public class DanhSachLopMonHoc {
 		frame.getContentPane().add(txtCMND);
 		txtCMND.setColumns(10);
 		
-		JLabel lblNewLabel_4 = new JLabel("DANH SÁCH LỚP MÔN ");
-		lblNewLabel_4.setForeground(Color.RED);
-		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblNewLabel_4.setBounds(348, 0, 342, 52);
-		frame.getContentPane().add(lblNewLabel_4);
+		JLabel lblDS = new JLabel("DANH SÁCH LỚP MÔN ");
+		lblDS.setForeground(Color.RED);
+		lblDS.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDS.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblDS.setBounds(0, 0, 1070, 52);
+		frame.getContentPane().add(lblDS);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(15, 217, 1055, 371);
@@ -123,24 +165,18 @@ public class DanhSachLopMonHoc {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		
-		JComboBox<String> cbbLop = new JComboBox<String>();
+		cbbLop = new JComboBox<String>();
 		cbbLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				QuanLiSinhVien.begin();
-				List<String> LopMH = QuanLiSinhVien.getLopMhAndMaMH();
-				for(int i = 0 ; i < LopMH.size() ; i++) {
-					String lop = LopMH.get(i).toString();
-					String lop1 = lop.substring(0, 4);
-					String lop2 = lop.substring(5);	
-					String tenMH = QuanLiSinhVien.getTenMH(lop2);
-					String lop3 = lop1 + "-" + lop2 + "-" +tenMH ;
-					cbbLop.addItem(lop3);
-				}
-				QuanLiSinhVien.end();
+				String tieuDe = cbbLop.getSelectedItem().toString();
+				String tieuDe2 = "DANH SÁCH LỚP MÔN " + tieuDe.substring(tieuDe.lastIndexOf("-")+1);
+				lblDS.setText(tieuDe2.toUpperCase());
+				loadDanhSachLopMH();
+				
 			}
 		});
-		cbbLop.setBounds(212, 66, 146, 26);
+		cbbLop.setBounds(212, 66, 461, 26);
 		frame.getContentPane().add(cbbLop);
 		
 		JLabel lblNewLabel_5 = new JLabel("Lớp");
@@ -158,7 +194,7 @@ public class DanhSachLopMonHoc {
 		JButton btnNewButton_2 = new JButton("Quay lại");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				frame.setVisible(false);
 				MainWindow main = new MainWindow();
 				main.getFrmMainWindow().setLocationRelativeTo(null);
 				main.getFrmMainWindow().setVisible(true);

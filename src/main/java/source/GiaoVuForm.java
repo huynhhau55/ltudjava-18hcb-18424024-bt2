@@ -32,6 +32,7 @@ public class GiaoVuForm {
 	private JLabel lblImportVaoDanh;
 	private JScrollPane scrollPane;
 	private JButton btnQLSV;
+	private int sttDsLopMH;
 	
 	
 
@@ -118,7 +119,7 @@ public class GiaoVuForm {
 					Object[][] content = new Object[elements.size()][6];
 					
 					for (int i = 0; i < elements.size(); i++) {
-						QuanLiSinhVien.createDSLop(elements.get(i)[1], elements.get(i)[2],
+						QuanLiSinhVien.createDSLop(Integer.parseInt(elements.get(i)[0].toString()),elements.get(i)[1], elements.get(i)[2],
 								elements.get(i)[3],elements.get(i)[4], elements.get(i)[5]);
 						for (int j = 0; j < 6; j++) {
 							

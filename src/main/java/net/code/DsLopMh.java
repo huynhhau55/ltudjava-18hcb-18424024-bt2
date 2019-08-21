@@ -1,13 +1,14 @@
 package net.code;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ds_lop")
+@Table(name = "ds_lop_mh")
 public class DsLopMh {
-	
+	private int stt;
 	private String ma_sv;
 	private String ho_ten;
 	private String gioi_tinh;
@@ -15,12 +16,26 @@ public class DsLopMh {
 	private String lop_mh;
 	private String ma_mh;
 	
-	@Id
+	@Id 
+	@Column(name = "stt")
+	public int getStt() {
+		return stt;
+	}
+	public void setStt(int stt) {
+		this.stt = stt;
+	}
+	
 	public String getMa_sv() {
 		return ma_sv;
 	}
 	public void setMa_sv(String ma_sv) {
 		this.ma_sv = ma_sv;
+	}
+	public String getMa_mh() {
+		return ma_mh;
+	}
+	public void setMa_mh(String ma_mh) {
+		this.ma_mh = ma_mh;
 	}
 	public String getHo_ten() {
 		return ho_ten;
@@ -46,12 +61,7 @@ public class DsLopMh {
 	public void setLop_mh(String lop_mh) {
 		this.lop_mh = lop_mh;
 	}
-	public String getMa_mh() {
-		return ma_mh;
-	}
-	public void setMa_mh(String ma_mh) {
-		this.ma_mh = ma_mh;
-	}
+	
 	
 	
 }
