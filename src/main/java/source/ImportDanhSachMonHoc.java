@@ -4,18 +4,31 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
+import net.code.QuanLiSinhVien;
+
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class ImportDanhSachMonHoc {
 
 	private JFrame frame;
-	private JTextField textField;
+	private JTextField txtDuongDan;
 	private JTable table;
 
 	
@@ -62,12 +75,71 @@ public class ImportDanhSachMonHoc {
 		lblNewLabel.setBounds(68, 24, 943, 46);
 		frame.getContentPane().add(lblNewLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(226, 78, 470, 39);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		txtDuongDan = new JTextField();
+		txtDuongDan.setBounds(226, 78, 470, 39);
+		frame.getContentPane().add(txtDuongDan);
+		txtDuongDan.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Import");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				JFileChooser chooser = new JFileChooser(".\\Data\\DanhSachLopTungMonHoc\\");
+				chooser.showOpenDialog(null);
+				File f = chooser.getSelectedFile();
+				String filePath = f.getAbsolutePath();
+				txtDuongDan.setText(filePath);
+				Path pathToFile = Paths.get(filePath);
+				try(BufferedReader br = Files.newBufferedReader(pathToFile,StandardCharsets.UTF_8)){
+					List<String[]> elements = new ArrayList<String[]>();
+					String line = null;
+					boolean flag = false;
+					while ((line = br.readLine()) != null) {
+						
+						if(flag == false) {
+							
+							flag = true;
+							continue;
+							
+						}
+						else {
+							
+							String[] splitted = line.split(";");
+							elements.add(splitted);
+							
+						}
+						
+						
+					}
+					br.close();
+					String[] columsName = new String[] {
+							
+							"STT", "MSSV", "Họ Tên", "Giới Tính", "CMND", "Lớp Môn Học"
+							
+						};
+					
+					Object[][] content = new Object[elements.size()][6];
+					
+					for (int i = 0; i < elements.size(); i++) {
+						QuanLiSinhVien.createDanhSachLopMH(elements.get(i)[1], elements.get(i)[2],
+								elements.get(i)[3],elements.get(i)[4], elements.get(i)[5],elements.get(i)[6]);
+						for (int j = 0; j < 6; j++) {
+							
+							content[i][j] = elements.get(i)[j];
+							
+						}
+						
+					}
+					table.setModel(new DefaultTableModel(content,columsName));
+					QuanLiSinhVien.end();
+					
+					
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		});
 		btnNewButton.setBounds(68, 78, 127, 39);
 		frame.getContentPane().add(btnNewButton);
 		

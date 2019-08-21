@@ -8,10 +8,16 @@ import javax.swing.JTable;
 import javax.swing.JComboBox;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+
+import net.code.QuanLiSinhVien;
+
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
 
 public class DanhSachLopMonHoc {
 
@@ -56,6 +62,13 @@ public class DanhSachLopMonHoc {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				
+				
+			}
+		});
 		frame.setBounds(100, 100, 1107, 660);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -110,9 +123,25 @@ public class DanhSachLopMonHoc {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(212, 66, 146, 26);
-		frame.getContentPane().add(comboBox);
+		JComboBox<String> cbbLop = new JComboBox<String>();
+		cbbLop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				QuanLiSinhVien.begin();
+				List<String> LopMH = QuanLiSinhVien.getLopMhAndMaMH();
+				for(int i = 0 ; i < LopMH.size() ; i++) {
+					String lop = LopMH.get(i).toString();
+					String lop1 = lop.substring(0, 4);
+					String lop2 = lop.substring(5);	
+					String tenMH = QuanLiSinhVien.getTenMH(lop2);
+					String lop3 = lop1 + "-" + lop2 + "-" +tenMH ;
+					cbbLop.addItem(lop3);
+				}
+				QuanLiSinhVien.end();
+			}
+		});
+		cbbLop.setBounds(212, 66, 146, 26);
+		frame.getContentPane().add(cbbLop);
 		
 		JLabel lblNewLabel_5 = new JLabel("Lớp");
 		lblNewLabel_5.setBounds(93, 69, 69, 20);

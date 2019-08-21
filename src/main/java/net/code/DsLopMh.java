@@ -13,6 +13,7 @@ public class DsLopMh {
 	private String gioi_tinh;
 	private String cmnd;
 	private String lop_mh;
+	private String ma_mh;
 	
 	@Id
 	public String getMa_sv() {
@@ -44,6 +45,12 @@ public class DsLopMh {
 	}
 	public void setLop_mh(String lop_mh) {
 		this.lop_mh = lop_mh;
+	}
+	public String getMa_mh() {
+		return ma_mh;
+	}
+	public void setMa_mh(String ma_mh) {
+		this.ma_mh = ma_mh;
 	}
 	
 	

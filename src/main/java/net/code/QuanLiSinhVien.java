@@ -106,7 +106,6 @@ public class QuanLiSinhVien {
 		@SuppressWarnings("unchecked")
 		List<String> _lop = query.getResultList();
 		return _lop;
-		
 	}
 	@SuppressWarnings("unchecked")
 	public static  List<DsLop> queryGenetic(String sql){
@@ -137,13 +136,45 @@ public class QuanLiSinhVien {
 		@SuppressWarnings("unchecked")
 		List<ThoiKb> tkb = query.getResultList();
 		return tkb;
-		
 	}
-	
+	public static  List<String> queryLopTKB(){
+		String sql = "select distinct lop from ThoiKb;";
+		Query query = entityManager.createQuery(sql);
+		@SuppressWarnings("unchecked")
+		List<String> _lop = query.getResultList();
+		return _lop;
+	}
 	
 	//KẾT THÚC -- QUẢN LÝ THỜI KHÓA BIỂU
 	
 	//BẮT ĐẦU -- QUẢN LÝ DANH SÁCH LỚP MÔN HỌC
+	
+	public static void createDanhSachLopMH(String ma_sv, String ho_ten, String gioi_tinh, String cmnd,String lop_mh, String ma_mh ) {
+		
+		DsLopMh lopMH = new DsLopMh();
+		lopMH.setMa_sv(ma_sv);
+		lopMH.setHo_ten(ho_ten);
+		lopMH.setGioi_tinh(gioi_tinh);
+		lopMH.setCmnd(cmnd);
+		lopMH.setLop_mh(lop_mh);
+		lopMH.setMa_mh(ma_mh);
+		entityManager.persist(lopMH);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<String> getLopMhAndMaMH(){
+		String sql = "SELECT distinct t.lop_mh, t.ma_mh FROM ThoiKb t";
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+	}
+	
+	public static String getTenMH(String maMH)
+	{
+		ThoiKb tkb = find(maMH, ThoiKb.class);
+		return tkb.getTen_mh();
+			
+	}
+	
 	//KẾT THÚC -- QUẢN LÝ DANH SÁCH LỚP MÔN HỌC
 	
 	//BẮT ĐẦU -- QUẢN LÝ ĐIỂM

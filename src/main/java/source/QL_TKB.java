@@ -113,7 +113,7 @@ public class QL_TKB {
 			public void windowOpened(WindowEvent arg0) {
 				
 				QuanLiSinhVien.begin();
-				List<String> tkb = QuanLiSinhVien.query();
+				List<String> tkb = QuanLiSinhVien.queryLopTKB();
 				for (int i = 0 ; i < tkb.size(); i++) {
 					cbbLop.addItem(tkb.get(i));
 				}
