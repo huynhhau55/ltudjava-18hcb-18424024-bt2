@@ -181,6 +181,13 @@ public class QuanLiSinhVien {
 		return query.getResultList();							
 				
 	}
+	@SuppressWarnings("unchecked")
+	public static List<DsLopMh> getSTT_DSLMH() {
+		
+		String sql = "SELECT d FROM DsLopMh d";
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+	}
 	//KẾT THÚC -- QUẢN LÝ DANH SÁCH LỚP MÔN HỌC
 	
 	//BẮT ĐẦU -- QUẢN LÝ ĐIỂM
@@ -204,13 +211,12 @@ public class QuanLiSinhVien {
 		
 		String sql = "SELECT d FROM Diem d";
 		Query query = entityManager.createQuery(sql);
-		try
-		{
-			query.getResultList();
-		}catch(Exception e)
-		{
-			return null;
-		}
+		return query.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<Diem> fillCBBDiem(String sql) {
+		Query query = entityManager.createQuery(sql);
 		return query.getResultList();
 	}
 	//KẾT THÚC -- QUẢN LÝ ĐIỂM

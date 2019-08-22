@@ -1,5 +1,5 @@
 package source;
-//import java.awt.EventQueue;
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -8,23 +8,25 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+
+import net.code.Diem;
+import net.code.QuanLiSinhVien;
+import net.code.ThoiKb;
+
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class QL_BangDiem {
 
@@ -56,9 +58,8 @@ public class QL_BangDiem {
 		return this.cbbMonHoc;
 		
 	}
-	public String dauRot(String tongDiem) {
+	public String dauRot(float _tongDiem) {
 		
-		float _tongDiem = Float.parseFloat(tongDiem);
 		if(_tongDiem < 5.0 )
 		{
 			return "Rớt";
@@ -68,52 +69,40 @@ public class QL_BangDiem {
 	public void loadBangDiem() {
 		
 		int Dau = 0; int Rot = 0; double DauPercent; double RotPercent;
-		String valueCbbMonHoc = cbbMonHoc.getSelectedItem().toString();
-		String filePath = ".\\Data\\Diem\\" + valueCbbMonHoc.substring(0,valueCbbMonHoc.lastIndexOf("-")) + ".csv";
-		Path pathToFile = Paths.get(filePath);
-		try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)){
+		String cbb = cbbMonHoc.getSelectedItem().toString();
+		String[] split = cbb.split("-");
+		String lop_mh = split[0].replace(" ", "");
+		String ma_mh = split[1].replace(" ", "");
+		try {
+			QuanLiSinhVien.begin();
+			List<Diem> elements = QuanLiSinhVien.fillCBBDiem("SELECT d FROM Diem d WHERE d.ma_mh ='" + ma_mh + "' AND d.lop_mh = '" + lop_mh + "'");
+			QuanLiSinhVien.end();
 			
-			List<String[]> elements = new ArrayList<String[]>();
-			String line = null; boolean flag = false;
-			while((line = br.readLine()) != null ) {
-				if(flag == false) {
-					flag = true;
-					continue;
-				}
-				else {
-					
-					String[] spiltted = line.split(";");
-					elements.add(spiltted);
-				}
-			}
-			br.close();
 			String[] columsName = new String[] {
 					"STT","MSSV","Họ Tên","Điểm Giữa Kỳ", "Điểm Cuối Kỳ", "Điểm Khác", "Tổng Điểm", "Kết Quả"					
 			};
 			Object[][] content = new Object[elements.size()][8];
+			int stt = 0;
 			for(int i = 0; i < elements.size(); i++) {
-				for(int j = 0; j < 8; j++) {
-					
-					if(j == 7) {
-						
-						content[i][7] = dauRot(elements.get(i)[6].toString());
-						if(content[i][7].toString().equalsIgnoreCase("Đậu")){
+
+				content[i][7] = dauRot(elements.get(i).getDiem_tong());
+				if(content[i][7].toString().equalsIgnoreCase("Đậu")){
 							
-							Dau++;
-						}
-						else if(content[i][7].toString().equalsIgnoreCase("Rớt")) {
+					Dau++;
+				}else if(content[i][7].toString().equalsIgnoreCase("Rớt")) {
 							
-							Rot++;
-						}
-						
-					}
-					else {
-						
-						content[i][j] = elements.get(i)[j];
-					}
+					Rot++;
 				}
+				content[i][0] = ++stt;
+				content[i][1] = elements.get(i).getMa_sv();
+				content[i][2] = elements.get(i).getHo_ten();
+				content[i][3] = elements.get(i).getDiem_gk();
+				content[i][4] = elements.get(i).getDiem_ck();
+				content[i][5] = elements.get(i).getDiem_khac();
+				content[i][6] = elements.get(i).getDiem_tong();
 			}
 			table.setModel(new DefaultTableModel(content,columsName));
+			
 			int Tong = Dau + Rot;
 			if(Tong != 0) {
 				DauPercent = Math.round(((Dau * 100) / Tong)*100.0)/100.0;
@@ -130,7 +119,7 @@ public class QL_BangDiem {
 		
 	}
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -144,7 +133,7 @@ public class QL_BangDiem {
 				}
 			}
 		});
-	}*/
+	}
 
 	/**
 	 * Create the application.
@@ -158,6 +147,20 @@ public class QL_BangDiem {
 	 */
 	private void initialize() {
 		frmQLBD = new JFrame();
+		frmQLBD.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				
+				String tencbb = null;
+				QuanLiSinhVien.begin();
+				List<ThoiKb> LopMH = QuanLiSinhVien.getLopMhAndMaMH();
+				for(int i = 0 ; i < LopMH.size() ; i++) {
+					tencbb = LopMH.get(i).getLop().toString() +" - "+ LopMH.get(i).getMa_mh().toString() + " - " + LopMH.get(i).getTen_mh().toString();
+					cbbMonHoc.addItem(tencbb);
+				}
+				QuanLiSinhVien.end();
+			}
+		});
 		frmQLBD.setTitle("QU\u1EA2N L\u00DD B\u1EA2NG \u0110I\u1EC2M");
 		frmQLBD.setBounds(100, 100, 1107, 661);
 		frmQLBD.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

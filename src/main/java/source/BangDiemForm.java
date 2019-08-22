@@ -16,9 +16,6 @@ import net.code.QuanLiSinhVien;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,36 +42,7 @@ public class BangDiemForm {
 		return this.frmDiem;
 		
 	}
-	public static String readFileForCombo(String filePath,String maMH) {
-		
-		List<ThoiKhoaBieuClass> tKBs = ThoiKhoaBieuClass.readTKB(filePath);
-		for(ThoiKhoaBieuClass t : tKBs) {
-			
-			if(t.getmaMH().equalsIgnoreCase(maMH)) {
-				
-				return t.gettenMH();
-				
-			}	
-		}
-		return "";
-	}
 	
-	public static void writeFileForCombo(String filePath, String content) {
-		
-		try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath,true),StandardCharsets.UTF_8))) {
-			
-			pw.println(content);
-			pw.close();
-			
-		}
-		
-		catch(Exception e) {
-			
-			e.printStackTrace();
-			
-		}
-		
-	}
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -114,8 +82,7 @@ public class BangDiemForm {
 					
 					QuanLiSinhVien.begin();
 					List<Diem> diem = QuanLiSinhVien.getSTT();
-					if(diem == null)
-					{
+					if(diem.isEmpty()){		
 						sttDiem = 0;					
 					}
 					else {

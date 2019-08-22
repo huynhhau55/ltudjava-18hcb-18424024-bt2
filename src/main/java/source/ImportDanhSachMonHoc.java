@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import net.code.DsLopMh;
 import net.code.QuanLiSinhVien;
 
 import java.awt.Font;
@@ -30,7 +31,7 @@ public class ImportDanhSachMonHoc {
 	private JFrame frame;
 	private JTextField txtDuongDan;
 	private JTable table;
-	private int sttDSMH = 1;
+	private int sttDSMH = 0;
 
 	
 	public JFrame getJFrameIpDSMH() {
@@ -86,6 +87,14 @@ public class ImportDanhSachMonHoc {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				QuanLiSinhVien.begin();
+				List<DsLopMh> ds = QuanLiSinhVien.getSTT_DSLMH();
+				if(ds.isEmpty()){		
+					sttDSMH = 0;					
+				}
+				else {
+					
+					sttDSMH = ds.get(ds.size()-1).getStt();
+				}
 				JFileChooser chooser = new JFileChooser(".\\Data\\DanhSachLopTungMonHoc\\");
 				chooser.showOpenDialog(null);
 				File f = chooser.getSelectedFile();
@@ -124,7 +133,7 @@ public class ImportDanhSachMonHoc {
 					
 					for (int i = 0; i < elements.size(); i++) {
 			
-						QuanLiSinhVien.createDanhSachLopMH(sttDSMH++,elements.get(i)[1], elements.get(i)[2], elements.get(i)[3],elements.get(i)[4], 
+						QuanLiSinhVien.createDanhSachLopMH(++sttDSMH,elements.get(i)[1], elements.get(i)[2], elements.get(i)[3],elements.get(i)[4], 
 															elements.get(i)[5],elements.get(i)[6]);
 						
 						for (int j = 0; j < 7; j++) {
