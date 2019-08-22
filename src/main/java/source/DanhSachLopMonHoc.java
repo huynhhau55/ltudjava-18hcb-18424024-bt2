@@ -20,16 +20,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class DanhSachLopMonHoc {
 
 	private JFrame frame;
 	private JTextField txtMSSV;
 	private JTextField txtHoTen;
-	private JTextField txtGioiTinh;
 	private JTextField txtCMND;
 	private JTable table;
 	private JComboBox<String> cbbLop;
+	private JComboBox<String> cbbGioiTinh;
 
 	
 	public JFrame getFrmDsLopMH() {
@@ -141,11 +143,6 @@ public class DanhSachLopMonHoc {
 		lblNewLabel_3.setBounds(725, 69, 69, 20);
 		frame.getContentPane().add(lblNewLabel_3);
 		
-		txtGioiTinh = new JTextField();
-		txtGioiTinh.setBounds(823, 102, 146, 26);
-		frame.getContentPane().add(txtGioiTinh);
-		txtGioiTinh.setColumns(10);
-		
 		txtCMND = new JTextField();
 		txtCMND.setBounds(823, 66, 146, 26);
 		frame.getContentPane().add(txtCMND);
@@ -159,10 +156,23 @@ public class DanhSachLopMonHoc {
 		frame.getContentPane().add(lblDS);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(15, 217, 1055, 371);
+		scrollPane.setBounds(15, 217, 1055, 387);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				DefaultTableModel dfModel = (DefaultTableModel)table.getModel();
+				int selectedRowIndex = table.getSelectedRow();
+				
+				txtMSSV.setText(dfModel.getValueAt(selectedRowIndex,1).toString());
+				txtHoTen.setText(dfModel.getValueAt(selectedRowIndex, 2).toString());
+				cbbGioiTinh.setSelectedItem(dfModel.getValueAt(selectedRowIndex, 3).toString());
+				txtCMND.setText(dfModel.getValueAt(selectedRowIndex, 4).toString());				
+			}
+		});
 		scrollPane.setViewportView(table);
 		
 		cbbLop = new JComboBox<String>();
@@ -207,5 +217,11 @@ public class DanhSachLopMonHoc {
 		JButton btnNewButton_3 = new JButton("Thêm");
 		btnNewButton_3.setBounds(93, 158, 156, 43);
 		frame.getContentPane().add(btnNewButton_3);
+		
+		cbbGioiTinh = new JComboBox<String>();
+		cbbGioiTinh.addItem("Nam");
+		cbbGioiTinh.addItem("Nữ");
+		cbbGioiTinh.setBounds(823, 105, 146, 26);
+		frame.getContentPane().add(cbbGioiTinh);
 	}
 }

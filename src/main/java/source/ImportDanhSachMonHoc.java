@@ -123,7 +123,7 @@ public class ImportDanhSachMonHoc {
 					Object[][] content = new Object[elements.size()][7];
 					
 					for (int i = 0; i < elements.size(); i++) {
-						//sttDSMH = Integer.parseInt(elements.get(i)[0].toString());
+			
 						QuanLiSinhVien.createDanhSachLopMH(sttDSMH++,elements.get(i)[1], elements.get(i)[2], elements.get(i)[3],elements.get(i)[4], 
 															elements.get(i)[5],elements.get(i)[6]);
 						

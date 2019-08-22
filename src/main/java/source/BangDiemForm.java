@@ -1,13 +1,18 @@
 package source;
-//import java.awt.EventQueue;
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+
+import net.code.Diem;
+import net.code.QuanLiSinhVien;
+
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,6 +35,7 @@ public class BangDiemForm {
 	private JFrame frmDiem;
 	private JTable table;
 	private JTextField txtImport;
+	private int sttDiem = 0;
 
 	/**
 	 * Launch the application.
@@ -70,7 +76,7 @@ public class BangDiemForm {
 		
 	}
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -82,7 +88,7 @@ public class BangDiemForm {
 				}
 			}
 		});
-	}*/
+	}
 
 	/**
 	 * Create the application.
@@ -105,20 +111,23 @@ public class BangDiemForm {
 		JButton btnImport = new JButton("Import");
 		btnImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-					JFileChooser choser = new JFileChooser();
+					
+					QuanLiSinhVien.begin();
+					List<Diem> diem = QuanLiSinhVien.getSTT();
+					if(diem == null)
+					{
+						sttDiem = 0;					
+					}
+					else {
+						
+						sttDiem = diem.get(diem.size()-1).getStt();
+					}
+					JFileChooser choser = new JFileChooser(".\\Data\\Diem\\");
 					choser.showOpenDialog(null);
 					File f =choser.getSelectedFile();
 					String filePath = f.getAbsolutePath();
 					txtImport.setText(filePath);
-					String _txtImport = txtImport.getText();
-					String getClass1 = _txtImport.substring(_txtImport.lastIndexOf("\\")+1);
-					String getClass2 = getClass1.substring(0, getClass1.lastIndexOf("."));//18HCB-CTT001
-					String getClass3 = ".\\Data\\TKB\\" + getClass2.substring(0,5) + ".csv";//18HCB
-					String getClass4 = getClass2.substring(6);//CTT001
-					String getClass5 = getClass2 + "-" + readFileForCombo(getClass3, getClass4);
-					String fileImported = ".\\Data\\Diem\\FileDaImport.csv";
-					Path pathToFile = Paths.get(".\\Data\\Diem\\" + getClass2 + ".csv");
+					Path pathToFile = Paths.get(filePath);
 					try(BufferedReader br  = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)){
 					List<String[]> elements = new ArrayList<String[]>();
 					String line = null; boolean flag = false;
@@ -139,11 +148,12 @@ public class BangDiemForm {
 					}
 					br.close();
 					String[] columsName = new String[] {
-							"STT", "MSSV", "Họ Tên", "Điểm Giữa Kỳ", "Điểm Cuối Kỳ", "Điểm Khác","Tổng Điểm"
+							"STT", "MSSV", "Họ Tên", "Điểm Giữa Kỳ", "Điểm Cuối Kỳ", "Điểm Khác","Tổng Điểm", "Mã Môn Học", "Lớp Môn Học" 
 					};
-					Object[][] content = new Object[elements.size()][7];
+					Object[][] content = new Object[elements.size()][9];
 					for (int i = 0; i < elements.size(); i++) {
-						for (int j = 0; j < 7; j++) {
+						QuanLiSinhVien.createBangDien(++sttDiem,elements.get(i)[1], elements.get(i)[2], Float.parseFloat(elements.get(i)[3]), Float.parseFloat(elements.get(i)[4]), Float.parseFloat(elements.get(i)[5]), Float.parseFloat(elements.get(i)[6]), elements.get(i)[7], elements.get(i)[8]);
+						for (int j = 0; j < 9; j++) {
 							
 							content[i][j] = elements.get(i)[j];
 							
@@ -151,9 +161,9 @@ public class BangDiemForm {
 						
 					}
 					table.setModel(new DefaultTableModel(content,columsName));
-					writeFileForCombo(fileImported, getClass5);
-					
+					QuanLiSinhVien.end();
 				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(frmDiem, "File import đã tồn tại !");
 					e2.printStackTrace();
 				}
 			}

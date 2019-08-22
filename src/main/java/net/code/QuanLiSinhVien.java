@@ -184,6 +184,35 @@ public class QuanLiSinhVien {
 	//KẾT THÚC -- QUẢN LÝ DANH SÁCH LỚP MÔN HỌC
 	
 	//BẮT ĐẦU -- QUẢN LÝ ĐIỂM
+	
+	public static void createBangDien(int stt, String ma_sv, String ho_ten, float diem_gk, float diem_ck, float diem_khac, float diem_tong, String ma_mh, String lop_mh) {
+		
+		Diem ds = new Diem();
+		ds.setStt(stt);
+		ds.setMa_sv(ma_sv);
+		ds.setHo_ten(ho_ten);
+		ds.setDiem_gk(diem_gk);
+		ds.setDiem_ck(diem_ck);
+		ds.setDiem_khac(diem_khac);
+		ds.setDiem_tong(diem_tong);
+		ds.setLop_mh(lop_mh);
+		ds.setMa_mh(ma_mh);
+		entityManager.persist(ds);
+	}
+	@SuppressWarnings("unchecked")
+	public static List<Diem> getSTT() {
+		
+		String sql = "SELECT d FROM Diem d";
+		Query query = entityManager.createQuery(sql);
+		try
+		{
+			query.getResultList();
+		}catch(Exception e)
+		{
+			return null;
+		}
+		return query.getResultList();
+	}
 	//KẾT THÚC -- QUẢN LÝ ĐIỂM
 	
 	public static void end() {

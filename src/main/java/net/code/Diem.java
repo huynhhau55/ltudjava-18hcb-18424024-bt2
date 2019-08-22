@@ -8,15 +8,23 @@ import javax.persistence.Table;
 @Table(name = "diem")
 public class Diem {
 
+	private int stt;
 	private String ma_sv;
 	private String ho_ten;
 	private float diem_gk;
 	private float diem_ck;
 	private float diem_khac;
 	private float diem_tong;
+	private String ma_mh;
 	private String lop_mh;
 	
 	@Id
+	public int getStt() {
+		return stt;
+	}
+	public void setStt(int stt) {
+		this.stt = stt;
+	}
 	public String getMa_sv() {
 		return ma_sv;
 	}
@@ -52,6 +60,13 @@ public class Diem {
 	}
 	public void setDiem_tong(float diem_tong) {
 		this.diem_tong = diem_tong;
+	}
+	
+	public String getMa_mh() {
+		return ma_mh;
+	}
+	public void setMa_mh(String ma_mh) {
+		this.ma_mh = ma_mh;
 	}
 	public String getLop_mh() {
 		return lop_mh;
