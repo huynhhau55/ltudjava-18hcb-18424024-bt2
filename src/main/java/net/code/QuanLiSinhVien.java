@@ -8,7 +8,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-
 public class QuanLiSinhVien {
 
 	 static EntityManagerFactory factory;
@@ -188,6 +187,29 @@ public class QuanLiSinhVien {
 		Query query = entityManager.createQuery(sql);
 		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<DsLopMh> getDs(String ma_sv, String ma_mh, String lop_mh){
+		
+		String sql = "SELECT d FROM DsLopMh d WHERE d.ma_sv = '" +ma_sv+"' AND d.ma_mh = '"+ma_mh+"' AND d.lop_mh = '"+lop_mh+"'";
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+	}
+	
+	public static void xoaSV() {
+		//String ma_sv, String ma_mh, String lop_mh
+		//List <DsLopMh> ds = getDs(ma_sv, ma_mh, lop_mh);
+		int k = 1;
+		DsLopMh ds = entityManager.getReference(DsLopMh.class, k);
+		entityManager.remove(ds);
+		
+		
+		 
+		    
+		
+		
+	}
+	
 	//KẾT THÚC -- QUẢN LÝ DANH SÁCH LỚP MÔN HỌC
 	
 	//BẮT ĐẦU -- QUẢN LÝ ĐIỂM
@@ -219,7 +241,71 @@ public class QuanLiSinhVien {
 		Query query = entityManager.createQuery(sql);
 		return query.getResultList();
 	}
+	public static void capNhatDiem(String ma_sv, String ma_mh, String lop_mh, float diem_gk, float diem_ck, float diem_khac, float diem_tong) {
+		String sql = "SELECT d FROM Diem d WHERE d.ma_sv = '" + ma_sv + "' AND d.ma_mh = '" + ma_mh + "' AND d.lop_mh = '" + lop_mh + "'" ;
+		List<Diem> sv = fillCBBDiem(sql);
+		Diem d = new Diem();
+		d = sv.get(0);
+		d.setDiem_gk(diem_gk);
+		d.setDiem_ck(diem_ck);
+		d.setDiem_khac(diem_khac);
+		d.setDiem_tong(diem_tong);
+		entityManager.merge(d);
+		
+	}
 	//KẾT THÚC -- QUẢN LÝ ĐIỂM
+	
+	//BẮT ĐẦU -- QUẢN LÝ SINH VIÊN HỌC NHỮNG MÔN HỌC NÀO
+	
+	@SuppressWarnings("unchecked")
+	public static List<Diem> dsMonHoc(String sql){
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+		
+	}
+	//KẾT THÚC -- QUẢN LÝ SINH VIÊN HỌC NHỮNG MÔN HỌC NÀO
+	
+	//BẮT ĐẦU -- QUẢN LÝ PHÚC KHẢO
+	
+	public static void createThoiHanPK(int stt, int ngay_bd, int thang_bd, int nam_bd, int ngay_kt, int thang_kt, int nam_kt) {
+		
+		thoiHanPhucKhao th = new thoiHanPhucKhao();
+		th.setStt(stt);
+		th.setNgay_bd(ngay_bd);
+		th.setThang_bd(thang_bd);
+		th.setNam_bd(nam_bd);
+		th.setNgay_kt(ngay_kt);
+		th.setThang_kt(thang_kt);
+		th.setNam_kt(nam_kt);
+		entityManager.persist(th);
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<thoiHanPhucKhao> getThoiHan() {
+		
+		String sql = "SELECT t FROM thoiHanPhucKhao t";
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+	}
+	
+	public static void updateThoiHan(int ngay_bd, int thang_bd, int nam_bd, int ngay_kt, int thang_kt, int nam_kt) {
+		
+		
+		thoiHanPhucKhao th = new thoiHanPhucKhao();
+		th = getThoiHan().get(0);
+		th.setNgay_bd(ngay_bd);
+		th.setThang_bd(thang_bd);
+		th.setNam_bd(nam_bd);
+		th.setNgay_kt(ngay_kt);
+		th.setThang_kt(thang_kt);
+		th.setNam_kt(nam_kt);
+		entityManager.merge(th);
+		
+		
+	}
+	//KẾT THÚC -- QUẢN LÝ PHÚC KHẢO
+	
 	
 	public static void end() {
 		entityManager.getTransaction().commit();

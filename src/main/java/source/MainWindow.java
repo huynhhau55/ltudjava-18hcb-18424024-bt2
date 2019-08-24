@@ -14,7 +14,6 @@ import javax.swing.JButton;
 public class MainWindow {
 
 	private JFrame frmMainWindow;
-
 	/**
 	 * Launch the application.
 	 */
@@ -63,6 +62,7 @@ public class MainWindow {
 		frmMainWindow.getContentPane().add(menuBar);
 
 		JMenu _import = new JMenu("Import");
+		
 		menuBar.add(_import);
 
 		JMenuItem classList = new JMenuItem("Import danh sách lớp");
@@ -130,5 +130,19 @@ public class MainWindow {
 		btnNewButton.setIcon(new ImageIcon(".\\images\\logout.png"));
 		btnNewButton.setBounds(692, 51, 41, 37);
 		frmMainWindow.getContentPane().add(btnNewButton);
+		
+		JMenu quanLy = new JMenu("Quản lý");
+		menuBar.add(quanLy);
+		JMenuItem phucKhao = new JMenuItem("Phúc Khảo");
+		phucKhao.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frmMainWindow.setVisible(false);
+				PhucKhao pk = new PhucKhao();
+				pk.getfrmPhucKhao().setLocationRelativeTo(null);
+				pk.getfrmPhucKhao().setVisible(true);
+			}
+		});
+		quanLy.add(phucKhao);
 	}
+	
 }

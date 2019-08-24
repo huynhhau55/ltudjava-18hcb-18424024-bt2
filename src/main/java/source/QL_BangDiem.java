@@ -313,44 +313,21 @@ public class QL_BangDiem {
 		btnXoa.setBounds(365, 171, 151, 43);
 		frmQLBD.getContentPane().add(btnXoa);
 		
-		JButton btnCapNhat = new JButton("C\u1EADp nh\u1EADt");
+		JButton btnCapNhat = new JButton("Cập nhật");
 		btnCapNhat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				String valueCbbMonHoc = cbbMonHoc.getSelectedItem().toString();
-				String filePath = ".\\Data\\Diem\\" + valueCbbMonHoc.substring(0,valueCbbMonHoc.lastIndexOf("-")) + ".csv";
-				List<BangDiem> bangDiemS = BangDiem.readBangDiem(filePath);
-				for(BangDiem b : bangDiemS) {
-					
-					if(b.getMaSV().equalsIgnoreCase(txtMSSV.getText())) {
-						
-						b.setDiemGK(Float.parseFloat(txtDiemGK.getText()));
-						b.setDiemCK(Float.parseFloat(txtDiemCK.getText()));
-						b.setDiemKhac(Float.parseFloat(txtDiemKhac.getText()));
-						b.setDiemTong(Float.parseFloat(txtDiemTong.getText()));
-						break;
-						
-					}	
-				}
-				
-				try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath,false),StandardCharsets.UTF_8))){
-					
-					pw.println("STT;MSSV;Họ tên;Điểm GK;Điểm CK;Điểm Khác;Điểm Tổng");
-					int stt = 1;
-					for(BangDiem b : bangDiemS) {
-						
-						pw.println(Integer.toString(stt++) + ";" + b.getMaSV() + ";" + b.getHoTen() + ";" + b.getDiemGK() + 
-													";" + b.getDiemCK()+";" + b.getDiemKhac() + ";" + b.getDiemTong());
-				
-					}
-						pw.close();
-						loadBangDiem();
-				}catch(Exception e) {
-						
-						e.printStackTrace();				
-				}
-				
-				
+				String[] spitted = cbbMonHoc.getSelectedItem().toString().split("-");
+				String ma_sv = txtMSSV.getText();
+				String ma_mh = spitted[1].replace(" ", "");
+				String lop_mh = spitted[0].replace(" ", "");
+				float diem_gk = Float.parseFloat(txtDiemGK.getText());
+				float diem_ck = Float.parseFloat(txtDiemCK.getText());
+				float diem_khac = Float.parseFloat(txtDiemKhac.getText());
+				float diem_tong = Float.parseFloat(txtDiemTong.getText());
+				QuanLiSinhVien.begin();
+				QuanLiSinhVien.capNhatDiem(ma_sv, ma_mh, lop_mh, diem_gk, diem_ck, diem_khac, diem_tong);
+				QuanLiSinhVien.end();
+				loadBangDiem();
 			}
 		});
 		btnCapNhat.setBounds(584, 171, 156, 43);

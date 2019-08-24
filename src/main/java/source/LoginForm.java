@@ -116,11 +116,10 @@ public class LoginForm {
 						}
 						else {
 							
-							/*XemDiemForm xemDiem = new XemDiemForm();
+							XemDiemForm xemDiem = new XemDiemForm();
 							xemDiem.getJFrame().setLocationRelativeTo(null);
 							xemDiem.getJFrame().setVisible(true);
-							xemDiem.setlblMSSV(uname);*/
-							System.out.println("ok");
+							xemDiem.setlblMSSV(uname);
 						}
 					}
 					

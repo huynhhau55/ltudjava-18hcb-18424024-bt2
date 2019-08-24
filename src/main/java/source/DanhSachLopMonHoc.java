@@ -194,6 +194,22 @@ public class DanhSachLopMonHoc {
 		frame.getContentPane().add(lblNewLabel_5);
 		
 		JButton btnNewButton = new JButton("Xóa");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+				String[] spitted = cbbLop.getSelectedItem().toString().split("-");
+				String lop_mh = spitted[0].replace(" ", "");
+				String ma_mh = spitted[1].replace(" ", "");
+				String ma_sv = txtMSSV.getText();
+				QuanLiSinhVien.begin();
+				//QuanLiSinhVien.xoaSV(ma_sv, ma_mh, lop_mh);
+				QuanLiSinhVien.xoaSV();
+				QuanLiSinhVien.end();
+				loadDanhSachLopMH();
+				
+			}
+		});
 		btnNewButton.setBounds(348, 158, 151, 43);
 		frame.getContentPane().add(btnNewButton);
 		
