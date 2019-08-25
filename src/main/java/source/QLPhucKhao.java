@@ -224,7 +224,7 @@ public class QLPhucKhao {
 						QuanLiSinhVien.updatePhucKhao(ma_sv, ho_ten, mon_hoc, cot_diem_phuc_khao, diem_mong_muon, li_do, tinh_trang);
 						QuanLiSinhVien.end();
 						loadPhucKhao();
-						JOptionPane.showConfirmDialog(frm_QLPK, "Cập nhật thành công");
+						JOptionPane.showMessageDialog(frm_QLPK, "Cập nhật thành công");
 					}catch(Exception e2) {
 						
 						JOptionPane.showMessageDialog(frm_QLPK, "Cập nhật thất bại");
