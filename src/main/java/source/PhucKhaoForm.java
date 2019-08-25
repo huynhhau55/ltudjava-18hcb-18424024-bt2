@@ -164,26 +164,29 @@ public class PhucKhaoForm {
 		JButton btnTaoPK = new JButton("Tạo Phúc Khảo");
 		btnTaoPK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int dialogResult = JOptionPane.showConfirmDialog(null, " Xác nhận ?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (dialogResult == JOptionPane.YES_OPTION) {
 				
-				try {
-					SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
-					String[] thoigianBd =date.format(dateBD.getDate()).toString().split("-");
-					String[] thoigianKt =date.format(dateKT.getDate()).toString().split("-");
-					int stt =1;
-					int ngay_bd = Integer.parseInt(thoigianBd[0]);
-					int thang_bd = Integer.parseInt(thoigianBd[1]);
-					int nam_bd = Integer.parseInt(thoigianBd[2]);
-					int ngay_kt = Integer.parseInt(thoigianKt[0]);
-					int thang_kt = Integer.parseInt(thoigianKt[1]);
-					int nam_kt = Integer.parseInt(thoigianKt[2]);
-					QuanLiSinhVien.begin();
-					QuanLiSinhVien.createThoiHanPK(stt, ngay_bd, thang_bd, nam_bd, ngay_kt, thang_kt, nam_kt);
-					QuanLiSinhVien.end();
-				}catch(Exception ioe) {
-					
-					ioe.printStackTrace();
+					try {
+						SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
+						String[] thoigianBd =date.format(dateBD.getDate()).toString().split("-");
+						String[] thoigianKt =date.format(dateKT.getDate()).toString().split("-");
+						int stt =1;
+						int ngay_bd = Integer.parseInt(thoigianBd[0]);
+						int thang_bd = Integer.parseInt(thoigianBd[1]);
+						int nam_bd = Integer.parseInt(thoigianBd[2]);
+						int ngay_kt = Integer.parseInt(thoigianKt[0]);
+						int thang_kt = Integer.parseInt(thoigianKt[1]);
+						int nam_kt = Integer.parseInt(thoigianKt[2]);
+						QuanLiSinhVien.begin();
+						QuanLiSinhVien.createThoiHanPK(stt, ngay_bd, thang_bd, nam_bd, ngay_kt, thang_kt, nam_kt);
+						QuanLiSinhVien.end();
+					}catch(Exception ioe) {
+						
+						ioe.printStackTrace();
+					}
 				}
-				
 			}
 		});
 		btnTaoPK.setBounds(102, 115, 139, 40);
@@ -205,25 +208,28 @@ public class PhucKhaoForm {
 		JButton btnNewButton = new JButton("Cập Nhật");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
-					String[] thoigianBd =date.format(dateBD.getDate()).toString().split("-");
-					String[] thoigianKt =date.format(dateKT.getDate()).toString().split("-");
-					int ngay_bd = Integer.parseInt(thoigianBd[0]);
-					int thang_bd = Integer.parseInt(thoigianBd[1]);
-					int nam_bd = Integer.parseInt(thoigianBd[2]);
-					int ngay_kt = Integer.parseInt(thoigianKt[0]);
-					int thang_kt = Integer.parseInt(thoigianKt[1]);
-					int nam_kt = Integer.parseInt(thoigianKt[2]);
-					
-					QuanLiSinhVien.begin();
-					QuanLiSinhVien.updateThoiHan(ngay_bd, thang_bd, nam_bd, ngay_kt, thang_kt, nam_kt);
-					QuanLiSinhVien.end();
-					JOptionPane.showMessageDialog(frmPhucKhaoForm, "Đã cập nhật thành công");
-				}catch(Exception ioe) {
-					JOptionPane.showMessageDialog(frmPhucKhaoForm, "Cập nhật không thành công");
-					ioe.printStackTrace();
+				int dialogResult = JOptionPane.showConfirmDialog(null, " Xác nhận ?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					try {
+						SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
+						String[] thoigianBd =date.format(dateBD.getDate()).toString().split("-");
+						String[] thoigianKt =date.format(dateKT.getDate()).toString().split("-");
+						int ngay_bd = Integer.parseInt(thoigianBd[0]);
+						int thang_bd = Integer.parseInt(thoigianBd[1]);
+						int nam_bd = Integer.parseInt(thoigianBd[2]);
+						int ngay_kt = Integer.parseInt(thoigianKt[0]);
+						int thang_kt = Integer.parseInt(thoigianKt[1]);
+						int nam_kt = Integer.parseInt(thoigianKt[2]);
+						
+						QuanLiSinhVien.begin();
+						QuanLiSinhVien.updateThoiHan(ngay_bd, thang_bd, nam_bd, ngay_kt, thang_kt, nam_kt);
+						QuanLiSinhVien.end();
+						JOptionPane.showMessageDialog(frmPhucKhaoForm, "Đã cập nhật thành công");
+					}catch(Exception ioe) {
+						JOptionPane.showMessageDialog(frmPhucKhaoForm, "Cập nhật không thành công");
+						ioe.printStackTrace();
+					}
 				}
 			}
 		});

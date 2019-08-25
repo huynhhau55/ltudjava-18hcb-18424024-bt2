@@ -336,7 +336,7 @@ public class QuanLiSinhVien {
 		
 	}
 	public static void updatePhucKhao(String ma_sv, String ho_ten, String mon_hoc, 
-			                         String cot_diem_phuc_khao, String diem_mong_muon, String li_do,String tinh_trang ) {
+			                         String cot_diem_phuc_khao, float diem_mong_muon, String li_do, String tinh_trang ) {
 		phucKhao pk = new phucKhao();
 		List<phucKhao> dsPhucKhao = getSttPhucKhao2();
 		for(int i = 0 ; i < dsPhucKhao.size(); i++) {
@@ -352,7 +352,7 @@ public class QuanLiSinhVien {
 		pk.setHo_ten(ho_ten);
 		pk.setMon_hoc(mon_hoc);
 		pk.setCot_diem_phuc_khao(cot_diem_phuc_khao);
-		pk.setCot_diem_phuc_khao(diem_mong_muon);
+		pk.setDiem_mong_muon(diem_mong_muon);
 		pk.setLi_do(li_do);
 		pk.setTinh_trang(tinh_trang);
 		entityManager.merge(pk);

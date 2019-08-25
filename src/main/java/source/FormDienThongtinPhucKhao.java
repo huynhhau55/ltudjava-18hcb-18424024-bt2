@@ -209,32 +209,37 @@ public class FormDienThongtinPhucKhao {
 		JButton btnThem = new JButton("Thêm");
 		btnThem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					
-					String ma_sv = txtMSSV.getText();
-					String ho_ten = txtHoten.getText();
-					String mon_hoc = cbbMon.getSelectedItem().toString();
-					String cot_diem_phuc_khao = cbbCotDiemPK.getSelectedItem().toString();
-					float diem_mong_muon = Float.parseFloat(txtDiemMM.getText());
-					String li_do = txtLiDo.getText().toString();
-					
-					QuanLiSinhVien.begin();
-					List<phucKhao> pk = QuanLiSinhVien.getSttPhucKhao2();
-					if(pk.isEmpty()) {
-						sttPK = 0;
-					}
-					else {
-						
-						sttPK = pk.get(0).getStt();
-					}
-					QuanLiSinhVien.createPhucKhao(++sttPK, ma_sv, ho_ten, mon_hoc, cot_diem_phuc_khao, diem_mong_muon, li_do);
-					QuanLiSinhVien.end();
-					loadPhucKhao();
-				}catch(Exception e) {
-					
-					e.printStackTrace();
-				}
 				
+				int dialogResult = JOptionPane.showConfirmDialog(null, " Xác nhận ?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					try {
+						
+						String ma_sv = txtMSSV.getText();
+						String ho_ten = txtHoten.getText();
+						String mon_hoc = cbbMon.getSelectedItem().toString();
+						String cot_diem_phuc_khao = cbbCotDiemPK.getSelectedItem().toString();
+						float diem_mong_muon = Float.parseFloat(txtDiemMM.getText());
+						String li_do = txtLiDo.getText().toString();
+						
+						QuanLiSinhVien.begin();
+						List<phucKhao> pk = QuanLiSinhVien.getSttPhucKhao2();
+						if(pk.isEmpty()) {
+							sttPK = 0;
+						}
+						else {
+							
+							sttPK = pk.get(0).getStt();
+						}
+						QuanLiSinhVien.createPhucKhao(++sttPK, ma_sv, ho_ten, mon_hoc, cot_diem_phuc_khao, diem_mong_muon, li_do);
+						QuanLiSinhVien.end();
+						loadPhucKhao();
+						JOptionPane.showMessageDialog(frmDienTT, "Đã thêm thành công");
+					}catch(Exception e) {
+						
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 		btnThem.setBounds(167, 270, 115, 43);

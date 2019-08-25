@@ -192,26 +192,30 @@ public class AddStudentForm {
 		btnThem = new JButton("Th\u00EAm");
 		btnThem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblXoa.setText(null);
-				lblCapNhat.setText(null);
-				boolean flag = false;
-				try {
-					
-					QuanLiSinhVien.begin();
-					QuanLiSinhVien.createDSLop(txtMSSV.getText(), txtHoTen.getText(), cbbGioiTinh.getSelectedItem().toString(), txtCMND.getText(), cbbLop.getSelectedItem().toString());
-					QuanLiSinhVien.end();
-				}catch (Exception ioe) {
-					flag = true;
-					JOptionPane.showMessageDialog(null, "Đã tồn tại sinh viên");
-					ioe.printStackTrace();
-				}
-					loadSinhVien();
-					txtCMND.setText("");
-					txtHoTen.setText("");
-					txtMSSV.setText("");
-					if(flag == false) {
-						lblThem.setText("Đã thêm thành công");
+				int dialogResult = JOptionPane.showConfirmDialog(null, " Xác nhận ?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					lblXoa.setText(null);
+					lblCapNhat.setText(null);
+					boolean flag = false;
+					try {
+						
+						QuanLiSinhVien.begin();
+						QuanLiSinhVien.createDSLop(txtMSSV.getText(), txtHoTen.getText(), cbbGioiTinh.getSelectedItem().toString(), txtCMND.getText(), cbbLop.getSelectedItem().toString());
+						QuanLiSinhVien.end();
+					}catch (Exception ioe) {
+						flag = true;
+						JOptionPane.showMessageDialog(null, "Đã tồn tại sinh viên");
+						ioe.printStackTrace();
 					}
+						loadSinhVien();
+						txtCMND.setText("");
+						txtHoTen.setText("");
+						txtMSSV.setText("");
+						if(flag == false) {
+							lblThem.setText("Đã thêm thành công");
+						}
+				}
 						
 			}
 		});

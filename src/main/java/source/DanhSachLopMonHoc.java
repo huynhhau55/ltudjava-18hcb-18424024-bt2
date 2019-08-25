@@ -2,6 +2,7 @@ package source;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -197,16 +198,24 @@ public class DanhSachLopMonHoc {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
+				int dialogResult = JOptionPane.showConfirmDialog(null, " Xác nhận ?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					try {
+						String[] spitted = cbbLop.getSelectedItem().toString().split("-");
+						String lop_mh = spitted[0].replace(" ", "");
+						String ma_mh = spitted[1].replace(" ", "");
+						String ma_sv = txtMSSV.getText();
+						QuanLiSinhVien.begin();
+						QuanLiSinhVien.xoaSV(ma_sv, ma_mh, lop_mh);
+						//QuanLiSinhVien.xoaSV();
+						QuanLiSinhVien.end();
+						loadDanhSachLopMH();
+					}catch(Exception ex){
+						ex.printStackTrace();
+						}
+					}
 				
-				String[] spitted = cbbLop.getSelectedItem().toString().split("-");
-				String lop_mh = spitted[0].replace(" ", "");
-				String ma_mh = spitted[1].replace(" ", "");
-				String ma_sv = txtMSSV.getText();
-				QuanLiSinhVien.begin();
-				QuanLiSinhVien.xoaSV(ma_sv, ma_mh, lop_mh);
-				//QuanLiSinhVien.xoaSV();
-				QuanLiSinhVien.end();
-				loadDanhSachLopMH();
 				
 			}
 		});

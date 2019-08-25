@@ -2,6 +2,7 @@ package source;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
@@ -316,18 +317,26 @@ public class QL_BangDiem {
 		JButton btnCapNhat = new JButton("Cập nhật");
 		btnCapNhat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String[] spitted = cbbMonHoc.getSelectedItem().toString().split("-");
-				String ma_sv = txtMSSV.getText();
-				String ma_mh = spitted[1].replace(" ", "");
-				String lop_mh = spitted[0].replace(" ", "");
-				float diem_gk = Float.parseFloat(txtDiemGK.getText());
-				float diem_ck = Float.parseFloat(txtDiemCK.getText());
-				float diem_khac = Float.parseFloat(txtDiemKhac.getText());
-				float diem_tong = Float.parseFloat(txtDiemTong.getText());
-				QuanLiSinhVien.begin();
-				QuanLiSinhVien.capNhatDiem(ma_sv, ma_mh, lop_mh, diem_gk, diem_ck, diem_khac, diem_tong);
-				QuanLiSinhVien.end();
-				loadBangDiem();
+				int dialogResult = JOptionPane.showConfirmDialog(null, " Xác nhận ?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					try {
+						String[] spitted = cbbMonHoc.getSelectedItem().toString().split("-");
+						String ma_sv = txtMSSV.getText();
+						String ma_mh = spitted[1].replace(" ", "");
+						String lop_mh = spitted[0].replace(" ", "");
+						float diem_gk = Float.parseFloat(txtDiemGK.getText());
+						float diem_ck = Float.parseFloat(txtDiemCK.getText());
+						float diem_khac = Float.parseFloat(txtDiemKhac.getText());
+						float diem_tong = Float.parseFloat(txtDiemTong.getText());
+						QuanLiSinhVien.begin();
+						QuanLiSinhVien.capNhatDiem(ma_sv, ma_mh, lop_mh, diem_gk, diem_ck, diem_khac, diem_tong);
+						QuanLiSinhVien.end();
+						loadBangDiem();
+					}catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
 		btnCapNhat.setBounds(584, 171, 156, 43);

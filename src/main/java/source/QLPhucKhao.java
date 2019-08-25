@@ -3,6 +3,7 @@ package source;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -207,17 +208,29 @@ public class QLPhucKhao {
 		JButton btnCapNhat = new JButton("Cập Nhật");
 		btnCapNhat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String ma_sv = txtMaSV.getText();
-				String ho_ten = txtHoTen.getText();
-				String mon_hoc = txtMonHoc.getText();
-				String cot_diem_phuc_khao = txtCotDiemPK.getText();
-				String diem_mong_muon = txtDiemMongMuon.getText();
-				String li_do = txtLiDo.getText();
-				String tinh_trang = cbbTinhTrang.getSelectedItem().toString();
-				QuanLiSinhVien.begin();
-				QuanLiSinhVien.updatePhucKhao(ma_sv, ho_ten, mon_hoc, cot_diem_phuc_khao, diem_mong_muon, li_do, tinh_trang);
-				QuanLiSinhVien.end();
-				loadPhucKhao();
+				
+				int dialogResult = JOptionPane.showConfirmDialog(null, " Xác nhận ?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					try {
+						String ma_sv = txtMaSV.getText();
+						String ho_ten = txtHoTen.getText();
+						String mon_hoc = txtMonHoc.getText();
+						String cot_diem_phuc_khao = txtCotDiemPK.getText();
+						float diem_mong_muon = Float.parseFloat(txtDiemMongMuon.getText());
+						String li_do = txtLiDo.getText();
+						String tinh_trang = cbbTinhTrang.getSelectedItem().toString();
+						QuanLiSinhVien.begin();
+						QuanLiSinhVien.updatePhucKhao(ma_sv, ho_ten, mon_hoc, cot_diem_phuc_khao, diem_mong_muon, li_do, tinh_trang);
+						QuanLiSinhVien.end();
+						loadPhucKhao();
+						JOptionPane.showConfirmDialog(frm_QLPK, "Cập nhật thành công");
+					}catch(Exception e2) {
+						
+						JOptionPane.showMessageDialog(frm_QLPK, "Cập nhật thất bại");
+						e2.printStackTrace();
+					}
+				}
 			}
 		});
 		btnCapNhat.setBounds(596, 218, 137, 47);
