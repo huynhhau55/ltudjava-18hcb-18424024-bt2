@@ -11,9 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import net.code.QuanLiSinhVien;
-
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -70,7 +68,7 @@ public class GiaoVuForm {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		QuanLiSinhVien.begin();
+		
 		frmGiaoVu = new JFrame();
 		frmGiaoVu.setTitle("Danh Sach Lop");
 		frmGiaoVu.setBounds(100, 100, 1107, 660);
@@ -81,7 +79,7 @@ public class GiaoVuForm {
 		btnImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 					
-					
+					QuanLiSinhVien.begin();
 					JFileChooser chooser = new JFileChooser(".\\Data\\Lop\\");
 					chooser.showOpenDialog(null);
 					File f = chooser.getSelectedFile() ;

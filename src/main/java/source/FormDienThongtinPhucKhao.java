@@ -1,6 +1,6 @@
 package source;
 
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -59,7 +59,7 @@ public class FormDienThongtinPhucKhao {
 	void filCombobox () {
 		
 	}
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -70,7 +70,7 @@ public class FormDienThongtinPhucKhao {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
@@ -229,7 +229,7 @@ public class FormDienThongtinPhucKhao {
 						}
 						else {
 							
-							sttPK = pk.get(0).getStt();
+							sttPK = pk.size();
 						}
 						QuanLiSinhVien.createPhucKhao(++sttPK, ma_sv, ho_ten, mon_hoc, cot_diem_phuc_khao, diem_mong_muon, li_do);
 						QuanLiSinhVien.end();

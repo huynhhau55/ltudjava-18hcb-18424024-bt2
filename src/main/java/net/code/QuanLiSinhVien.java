@@ -198,10 +198,20 @@ public class QuanLiSinhVien {
 	
 	public static void xoaSV(String ma_sv, String ma_mh, String lop_mh) {
 		
-		List <DsLopMh> ds = getDs(ma_sv, ma_mh, lop_mh);
+		List <DsLopMh> ds = loadDsLMH("SELECT d FROM DsLopMh d");
+		for(int i =0; i< ds.size(); i++)
+		{
+			if((ds.get(i).getMa_sv().equalsIgnoreCase(ma_sv)) &&
+				(ds.get(i).getMa_mh().equalsIgnoreCase(ma_mh)) &&
+				(ds.get(i).getLop_mh().equalsIgnoreCase(lop_mh))) {
+				
+				entityManager.remove(ds.get(i));
+				break;
+			}
+		}
 		//int k = .getStt();
 		//DsLopMh ds = entityManager.getReference(DsLopMh.class, k);
-		entityManager.remove(ds.get(0));
+		
 		
 		
 		 
@@ -327,6 +337,8 @@ public class QuanLiSinhVien {
 		return query.getResultList();
 		
 	}
+	
+	
 	@SuppressWarnings("unchecked")
 	public static List<phucKhao> getSttPhucKhao2() {
 		

@@ -1,5 +1,5 @@
 package source;
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -120,7 +120,7 @@ public class QL_BangDiem {
 		
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -134,7 +134,7 @@ public class QL_BangDiem {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.

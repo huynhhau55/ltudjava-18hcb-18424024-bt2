@@ -1,5 +1,5 @@
 package source;
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -37,7 +37,7 @@ public class PhucKhaoForm {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -49,20 +49,19 @@ public class PhucKhaoForm {
 				}
 			}
 		});
-	}
-	@SuppressWarnings("rawtypes")
+	}*/
+	
 	private void loadTKB() {
 		try {
 			QuanLiSinhVien.begin();
 			List<ThoiKb> tkb = QuanLiSinhVien.queryTKB("SELECT t FROM ThoiKb t ") ;
-			QuanLiSinhVien.end();	
+			
 				
 			String[] columsName = new String[] {
-						"STT","Mã Môn Học","Tên Môn Học","Phòng Học", "Lớp","Phúc Khảo"						
+						"STT","Mã Môn Học","Tên Môn Học","Phòng Học", "Lớp"					
 				};
 				Object[][] content = new Object[tkb.size()][6];
-				final Class[] columnClass = new Class[] {
-			            Integer.class, String.class, String.class, String.class, String.class, Boolean.class};
+				
 				int stt = 1;
 				for(int i = 0; i < tkb.size(); i++) {
 							
@@ -73,21 +72,9 @@ public class PhucKhaoForm {
 					content[i][4] = tkb.get(i).getLop();		
 					content[i][5] = true;
 				}
-				@SuppressWarnings("serial")
-				DefaultTableModel model = new DefaultTableModel(content,columsName) {
-					
-					@Override
-		            public boolean isCellEditable(int row, int column)
-		            {
-		                return true;
-		            }
-		            @Override
-		            public Class<?> getColumnClass(int columnIndex)
-		            {
-		                return columnClass[columnIndex];
-		            }
-				};
-				table.setModel(model);
+				
+				table.setModel(new DefaultTableModel(content,columsName));
+				QuanLiSinhVien.end();
 			}catch (Exception e2) {
 			
 			e2.printStackTrace();
@@ -120,8 +107,8 @@ public class PhucKhaoForm {
 				Date s2 = new SimpleDateFormat("dd-MM-yyyy").parse(kt);
 				dateBD.setDate(s);
 				dateKT.setDate(s2);
-				}catch(Exception e)
-				{
+				}catch(Exception e){
+					
 					e.printStackTrace();
 				}
 				

@@ -1,6 +1,6 @@
 package source;
 import java.awt.Color;
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,7 +42,7 @@ public class ThoiKhoaBieuForm {
 	}
 	
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -54,7 +54,7 @@ public class ThoiKhoaBieuForm {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.

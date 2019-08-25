@@ -19,7 +19,7 @@ public class MainWindow {
 	 */
 	public JFrame getFrmMainWindow() {
 		
-		return this.frmMainWindow;
+		return frmMainWindow;
 	}
 	
 	/*public static void main(String[] args) {
@@ -136,13 +136,19 @@ public class MainWindow {
 		JMenuItem phucKhao = new JMenuItem("Phúc Khảo");
 		phucKhao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				PhucKhaoForm phucKhao = new PhucKhaoForm();
 				frmMainWindow.setVisible(false);
-				PhucKhaoForm pk = new PhucKhaoForm();
-				pk.getfrmPhucKhaoForm().setLocationRelativeTo(null);
-				pk.getfrmPhucKhaoForm().setVisible(true);
+				phucKhao.getfrmPhucKhaoForm().setLocationRelativeTo(null);
+				phucKhao.getfrmPhucKhaoForm().setVisible(true);
+				
+				
 			}
 		});
 		quanLy.add(phucKhao);
+		
+		
+		
 	}
 	
 }

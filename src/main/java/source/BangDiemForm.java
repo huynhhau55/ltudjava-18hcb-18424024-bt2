@@ -1,5 +1,5 @@
 package source;
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
@@ -44,7 +44,7 @@ public class BangDiemForm {
 	}
 	
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -56,7 +56,7 @@ public class BangDiemForm {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.

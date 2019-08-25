@@ -1,5 +1,5 @@
 package source;
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -42,7 +42,7 @@ public class DanhSachLopMonHoc {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -54,7 +54,7 @@ public class DanhSachLopMonHoc {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
@@ -208,7 +208,6 @@ public class DanhSachLopMonHoc {
 						String ma_sv = txtMSSV.getText();
 						QuanLiSinhVien.begin();
 						QuanLiSinhVien.xoaSV(ma_sv, ma_mh, lop_mh);
-						//QuanLiSinhVien.xoaSV();
 						QuanLiSinhVien.end();
 						loadDanhSachLopMH();
 					}catch(Exception ex){
