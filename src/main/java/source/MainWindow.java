@@ -137,9 +137,9 @@ public class MainWindow {
 		phucKhao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frmMainWindow.setVisible(false);
-				PhucKhao pk = new PhucKhao();
-				pk.getfrmPhucKhao().setLocationRelativeTo(null);
-				pk.getfrmPhucKhao().setVisible(true);
+				PhucKhaoForm pk = new PhucKhaoForm();
+				pk.getfrmPhucKhaoForm().setLocationRelativeTo(null);
+				pk.getfrmPhucKhaoForm().setVisible(true);
 			}
 		});
 		quanLy.add(phucKhao);

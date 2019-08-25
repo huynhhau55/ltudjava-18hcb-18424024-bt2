@@ -1,5 +1,5 @@
 package source;
-//import java.awt.EventQueue;
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 import net.code.Diem;
 import net.code.QuanLiSinhVien;
+import net.code.thoiHanPhucKhao;
 
 import java.awt.Font;
 import javax.swing.JButton;
@@ -19,6 +20,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 public class XemDiemForm {
 
@@ -27,7 +30,17 @@ public class XemDiemForm {
 	private JLabel lblMSSV;
 	private JLabel lblXinChao;
 	private JLabel lblXinChao2;
+	private JButton btnPhucKhao;
+	private String ma_sv;
+	private JLabel lblThoiHanPK;
 	
+	
+	public String getMa_sv() {
+		return ma_sv;
+	}
+	public void setMa_sv(String ma_sv) {
+		this.ma_sv = ma_sv;
+	}
 	public JFrame getJFrame() {
 		
 		return frmThongTinDiem;
@@ -54,16 +67,41 @@ public class XemDiemForm {
 	
 	void readDiem() {
 
-		String maSV = lblMSSV.getText().toString();		
-		try{
+		try {
+			
+			Date phuckhaoBD, phuckhaoKT ;
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  
+			Date dateCurrent = new Date();
+			String dateCurrent2 = formatter.format(dateCurrent);
+			//String maSV = lblMSSV.getText().toString();
+			//String maSV = ma_sv;
+			Date dateCurrent3 = new SimpleDateFormat("dd-MM-yyyy").parse(dateCurrent2);
 			QuanLiSinhVien.begin();
-			List<Diem> dsLop = QuanLiSinhVien.dsMonHoc("SELECT d FROM Diem d WHERE d.ma_sv = '" + maSV + "'");
+			List<thoiHanPhucKhao> thoihan = QuanLiSinhVien.getThoiHan();
+			
+			List<Diem> dsLop = QuanLiSinhVien.dsMonHoc("SELECT d FROM Diem d WHERE d.ma_sv = '" + ma_sv + "'");
+			
+			String bd = String.valueOf(thoihan.get(0).getNgay_bd()) + "-" + String.valueOf(thoihan.get(0).getThang_bd()) + "-" + String.valueOf(thoihan.get(0).getNam_bd()) ;
+			String kt = String.valueOf(thoihan.get(0).getNgay_kt()) + "-" + String.valueOf(thoihan.get(0).getThang_kt()) + "-" + String.valueOf(thoihan.get(0).getNam_kt()) ;
+			lblThoiHanPK.setText("Thời gian phúc khảo từ "+bd+" đến "+kt);
+			phuckhaoBD = new SimpleDateFormat("dd-MM-yyyy").parse(bd);
+			phuckhaoKT = new SimpleDateFormat("dd-MM-yyyy").parse(kt);
+			if((dateCurrent3.compareTo(phuckhaoBD) > 0 ||dateCurrent3.compareTo(phuckhaoBD) == 0) &&
+			   (dateCurrent3.compareTo(phuckhaoKT) < 0 ||dateCurrent3.compareTo(phuckhaoKT) == 0)) 
+			{
+				
+				btnPhucKhao.setEnabled(true);
+			}
+			
 			lblXinChao2.setText(dsLop.get(0).getHo_ten().toString().toUpperCase());
 			
 			String[] columsName = new String[] {
-					"STT","Lớp Môn Học","Mã Môn Học","Tên Môn Học","Điểm Giữa Kỳ", "Điểm Cuối Kỳ", "Điểm Khác", "Tổng Điểm", "Kết Quả"					
+					"STT","Lớp Môn Học","Mã Môn Học","Tên Môn Học","Điểm Giữa Kỳ", "Điểm Cuối Kỳ", "Điểm Khác", "Tổng Điểm", "Kết Quả", "Phúc Khảo"				
 			};
-			Object[][] content = new Object[dsLop.size()][9];
+			Object[][] content = new Object[dsLop.size()][10];
+			@SuppressWarnings("rawtypes")
+			final Class[] columnClass = new Class[] {
+		            Integer.class, String.class, String.class, String.class, Float.class, Float.class, Float.class, Float.class, String.class , Boolean.class};
 			int sTT = 1;
 			for(int i = 0; i < dsLop.size(); i++) {
 						
@@ -75,9 +113,24 @@ public class XemDiemForm {
 					content[i][5] = dsLop.get(i).getDiem_ck();
 					content[i][6] = dsLop.get(i).getDiem_khac();
 					content[i][7] = dsLop.get(i).getDiem_tong();
-					content[i][8] = dauRot(dsLop.get(i).getDiem_tong());				
+					content[i][8] = dauRot(dsLop.get(i).getDiem_tong());
+					content[i][9] = false;
 			}
-			table.setModel(new DefaultTableModel(content,columsName));
+			@SuppressWarnings("serial")
+			DefaultTableModel model = new DefaultTableModel(content,columsName) {
+				
+				@Override
+	            public boolean isCellEditable(int row, int column)
+	            {
+	                return true;
+	            }
+	            @Override
+	            public Class<?> getColumnClass(int columnIndex)
+	            {
+	                return columnClass[columnIndex];
+	            }
+			};
+			table.setModel(model);
 			QuanLiSinhVien.end();
 		}catch(Exception e){
 			
@@ -89,7 +142,7 @@ public class XemDiemForm {
 	 * Launch the application.
 	 */
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -101,7 +154,7 @@ public class XemDiemForm {
 				}
 			}
 		});
-	}*/
+	}
 
 	/**
 	 * Create the application.
@@ -119,7 +172,13 @@ public class XemDiemForm {
 			@Override
 			public void windowOpened(WindowEvent e) {
 		
-				readDiem();	
+				
+				readDiem();
+				
+			}
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				btnPhucKhao.setEnabled(false);
 			}
 		});
 		frmThongTinDiem.setTitle("TH\u00D4NG TIN \u0110I\u1EC2M");
@@ -131,11 +190,11 @@ public class XemDiemForm {
 		lblXinChao.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblXinChao.setHorizontalAlignment(SwingConstants.CENTER);
 		lblXinChao.setForeground(Color.RED);
-		lblXinChao.setBounds(15, 0, 1055, 60);
+		lblXinChao.setBounds(15, 16, 1055, 59);
 		frmThongTinDiem.getContentPane().add(lblXinChao);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(15, 91, 1055, 513);
+		scrollPane.setBounds(15, 119, 1055, 485);
 		frmThongTinDiem.getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -158,12 +217,12 @@ public class XemDiemForm {
 			}
 		});
 		btnLogout.setIcon(new ImageIcon(".\\images\\logout.png"));
-		btnLogout.setBounds(966, 46, 69, 29);
+		btnLogout.setBounds(920, 46, 115, 29);
 		frmThongTinDiem.getContentPane().add(btnLogout);
 		
 		JLabel lblLogOut = new JLabel("\u0110\u0103ng Xu\u1EA5t");
 		lblLogOut.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLogOut.setBounds(943, 16, 105, 29);
+		lblLogOut.setBounds(920, 16, 115, 29);
 		frmThongTinDiem.getContentPane().add(lblLogOut);
 		
 		lblMSSV = new JLabel("");
@@ -173,14 +232,32 @@ public class XemDiemForm {
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(".\\images\\Add.png"));
-		lblNewLabel.setBounds(37, 26, 63, 60);
+		lblNewLabel.setBounds(37, 26, 63, 77);
 		frmThongTinDiem.getContentPane().add(lblNewLabel);
 		
 		lblXinChao2 = new JLabel("");
 		lblXinChao2.setForeground(Color.RED);
 		lblXinChao2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblXinChao2.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblXinChao2.setBounds(375, 39, 335, 36);
+		lblXinChao2.setBounds(367, 59, 346, 36);
 		frmThongTinDiem.getContentPane().add(lblXinChao2);
+		
+		btnPhucKhao = new JButton("Phúc Khảo");
+		btnPhucKhao.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmThongTinDiem.setVisible(false);
+				FormDienThongtinPhucKhao dientt = new FormDienThongtinPhucKhao();
+				dientt.getfrmDienTT().setLocationRelativeTo(null);
+				dientt.getfrmDienTT().setVisible(true);
+				dientt.setMa_sv(ma_sv);
+			}
+		});
+		btnPhucKhao.setEnabled(false);
+		btnPhucKhao.setBounds(920, 80, 115, 29);
+		frmThongTinDiem.getContentPane().add(btnPhucKhao);
+		
+		lblThoiHanPK = new JLabel("");
+		lblThoiHanPK.setBounds(631, 80, 280, 29);
+		frmThongTinDiem.getContentPane().add(lblThoiHanPK);
 	}
 }

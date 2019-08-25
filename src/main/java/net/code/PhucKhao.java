@@ -1,12 +1,13 @@
 package net.code;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "phuc_khao")
-public class PhucKhao {
+public class phucKhao {
 	
 	private int stt;
 	private String ma_sv;
@@ -16,11 +17,9 @@ public class PhucKhao {
 	private float diem_mong_muon;
 	private String li_do;
 	private String tinh_trang;
-	private int ngay;
-	private int thang;
-	private int nam;
 	
-	@Id 
+	@Id
+	@Column(name = "stt")
 	public int getStt() {
 		return stt;
 	}
@@ -63,24 +62,7 @@ public class PhucKhao {
 	public void setLi_do(String li_do) {
 		this.li_do = li_do;
 	}
-	public int getNgay() {
-		return ngay;
-	}
-	public void setNgay(int ngay) {
-		this.ngay = ngay;
-	}
-	public int getThang() {
-		return thang;
-	}
-	public void setThang(int thang) {
-		this.thang = thang;
-	}
-	public int getNam() {
-		return nam;
-	}
-	public void setNam(int nam) {
-		this.nam = nam;
-	}
+	
 	public String getTinh_trang() {
 		return tinh_trang;
 	}

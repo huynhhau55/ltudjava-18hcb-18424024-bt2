@@ -115,11 +115,11 @@ public class LoginForm {
 						mainWindow.getFrmMainWindow().setVisible(true);
 						}
 						else {
-							
+							frmLogin.setVisible(false);
 							XemDiemForm xemDiem = new XemDiemForm();
 							xemDiem.getJFrame().setLocationRelativeTo(null);
 							xemDiem.getJFrame().setVisible(true);
-							xemDiem.setlblMSSV(uname);
+							xemDiem.setMa_sv(uname);;
 						}
 					}
 					

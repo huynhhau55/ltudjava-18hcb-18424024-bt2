@@ -1,5 +1,4 @@
 package source;
-
 import java.awt.EventQueue;
 import java.util.List;
 import javax.swing.JFrame;
@@ -15,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -22,17 +22,17 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class PhucKhao {
+public class PhucKhaoForm {
 
-	private JFrame frmPhucKhao;
+	private JFrame frmPhucKhaoForm;
 	private JTable table;
 	private JDateChooser dateBD;
 	private JDateChooser dateKT;
 
 	
-	public JFrame getfrmPhucKhao() {
+	public JFrame getfrmPhucKhaoForm() {
 		
-		return frmPhucKhao;
+		return frmPhucKhaoForm;
 	}
 	/**
 	 * Launch the application.
@@ -41,9 +41,9 @@ public class PhucKhao {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PhucKhao window = new PhucKhao();
-					window.frmPhucKhao.setVisible(true);
-					window.frmPhucKhao.setLocationRelativeTo(null);
+					PhucKhaoForm window = new PhucKhaoForm();
+					window.frmPhucKhaoForm.setVisible(true);
+					window.frmPhucKhaoForm.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -97,7 +97,7 @@ public class PhucKhao {
 	/**
 	 * Create the application.
 	 */
-	public PhucKhao() {
+	public PhucKhaoForm() {
 		initialize();
 	}
 
@@ -105,8 +105,8 @@ public class PhucKhao {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmPhucKhao = new JFrame();
-		frmPhucKhao.addWindowListener(new WindowAdapter() {
+		frmPhucKhaoForm = new JFrame();
+		frmPhucKhaoForm.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent arg0) {
 				try {
@@ -127,39 +127,39 @@ public class PhucKhao {
 				
 			}
 		});
-		frmPhucKhao.setBounds(100, 100, 1107, 660);
-		frmPhucKhao.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmPhucKhao.getContentPane().setLayout(null);
+		frmPhucKhaoForm.setBounds(100, 100, 1107, 660);
+		frmPhucKhaoForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmPhucKhaoForm.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(15, 171, 1055, 433);
-		frmPhucKhao.getContentPane().add(scrollPane);
+		frmPhucKhaoForm.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		
 		dateKT = new JDateChooser();
 		dateKT.setBounds(722, 69, 248, 31);
-		frmPhucKhao.getContentPane().add(dateKT);
+		frmPhucKhaoForm.getContentPane().add(dateKT);
 		
 		JLabel lblTaoPK = new JLabel("GIÁO VỤ TẠO PHÚC KHẢO");
 		lblTaoPK.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTaoPK.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblTaoPK.setForeground(Color.RED);
 		lblTaoPK.setBounds(15, 0, 1055, 68);
-		frmPhucKhao.getContentPane().add(lblTaoPK);
+		frmPhucKhaoForm.getContentPane().add(lblTaoPK);
 		
 		JLabel lblNgayBD = new JLabel("Ngày bắt đầu");
 		lblNgayBD.setBounds(102, 69, 113, 31);
-		frmPhucKhao.getContentPane().add(lblNgayBD);
+		frmPhucKhaoForm.getContentPane().add(lblNgayBD);
 		
 		JLabel lblNgayKT = new JLabel("Ngày kết thúc");
 		lblNgayKT.setBounds(596, 69, 127, 31);
-		frmPhucKhao.getContentPane().add(lblNgayKT);
+		frmPhucKhaoForm.getContentPane().add(lblNgayKT);
 		
 		dateBD = new JDateChooser();
 		dateBD.setBounds(220, 69, 248, 31);
-		frmPhucKhao.getContentPane().add(dateBD);
+		frmPhucKhaoForm.getContentPane().add(dateBD);
 		
 		JButton btnTaoPK = new JButton("Tạo Phúc Khảo");
 		btnTaoPK.addActionListener(new ActionListener() {
@@ -187,46 +187,64 @@ public class PhucKhao {
 			}
 		});
 		btnTaoPK.setBounds(102, 115, 139, 40);
-		frmPhucKhao.getContentPane().add(btnTaoPK);
+		frmPhucKhaoForm.getContentPane().add(btnTaoPK);
 		
 		JButton btnQuayLai = new JButton("Quay Lại");
 		btnQuayLai.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				frmPhucKhao.setVisible(false);
+				frmPhucKhaoForm.setVisible(false);
 				MainWindow main = new MainWindow();
 				main.getFrmMainWindow().setLocationRelativeTo(null);
 				main.getFrmMainWindow().setVisible(true);
 			}
 		});
 		btnQuayLai.setBounds(831, 116, 139, 40);
-		frmPhucKhao.getContentPane().add(btnQuayLai);
+		frmPhucKhaoForm.getContentPane().add(btnQuayLai);
 		
 		JButton btnNewButton = new JButton("Cập Nhật");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
-				String[] thoigianBd =date.format(dateBD.getDate()).toString().split("-");
-				String[] thoigianKt =date.format(dateKT.getDate()).toString().split("-");
-				int ngay_bd = Integer.parseInt(thoigianBd[0]);
-				int thang_bd = Integer.parseInt(thoigianBd[1]);
-				int nam_bd = Integer.parseInt(thoigianBd[2]);
-				int ngay_kt = Integer.parseInt(thoigianKt[0]);
-				int thang_kt = Integer.parseInt(thoigianKt[1]);
-				int nam_kt = Integer.parseInt(thoigianKt[2]);
-				
-				QuanLiSinhVien.begin();
-				QuanLiSinhVien.updateThoiHan(ngay_bd, thang_bd, nam_bd, ngay_kt, thang_kt, nam_kt);
-				QuanLiSinhVien.end();
+				try {
+					SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
+					String[] thoigianBd =date.format(dateBD.getDate()).toString().split("-");
+					String[] thoigianKt =date.format(dateKT.getDate()).toString().split("-");
+					int ngay_bd = Integer.parseInt(thoigianBd[0]);
+					int thang_bd = Integer.parseInt(thoigianBd[1]);
+					int nam_bd = Integer.parseInt(thoigianBd[2]);
+					int ngay_kt = Integer.parseInt(thoigianKt[0]);
+					int thang_kt = Integer.parseInt(thoigianKt[1]);
+					int nam_kt = Integer.parseInt(thoigianKt[2]);
+					
+					QuanLiSinhVien.begin();
+					QuanLiSinhVien.updateThoiHan(ngay_bd, thang_bd, nam_bd, ngay_kt, thang_kt, nam_kt);
+					QuanLiSinhVien.end();
+					JOptionPane.showMessageDialog(frmPhucKhaoForm, "Đã cập nhật thành công");
+				}catch(Exception ioe) {
+					JOptionPane.showMessageDialog(frmPhucKhaoForm, "Cập nhật không thành công");
+					ioe.printStackTrace();
+				}
 			}
 		});
-		btnNewButton.setBounds(349, 116, 139, 39);
-		frmPhucKhao.getContentPane().add(btnNewButton);
+		btnNewButton.setBounds(279, 116, 139, 39);
+		frmPhucKhaoForm.getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Xóa");
-		btnNewButton_1.setBounds(595, 116, 139, 39);
-		frmPhucKhao.getContentPane().add(btnNewButton_1);
+		btnNewButton_1.setBounds(464, 116, 139, 39);
+		frmPhucKhaoForm.getContentPane().add(btnNewButton_1);
+		
+		JButton btnQLPK = new JButton("QL-Phúc Khảo");
+		btnQLPK.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frmPhucKhaoForm.setVisible(false);
+				QLPhucKhao pk = new QLPhucKhao();
+				pk.getfrm_QLPK().setLocationRelativeTo(null);
+				pk.getfrm_QLPK().setVisible(true);;
+			}
+		});
+		btnQLPK.setBounds(648, 116, 145, 39);
+		frmPhucKhaoForm.getContentPane().add(btnQLPK);
 		
 		
 		

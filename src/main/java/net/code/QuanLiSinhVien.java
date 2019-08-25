@@ -196,12 +196,12 @@ public class QuanLiSinhVien {
 		return query.getResultList();
 	}
 	
-	public static void xoaSV() {
-		//String ma_sv, String ma_mh, String lop_mh
-		//List <DsLopMh> ds = getDs(ma_sv, ma_mh, lop_mh);
-		int k = 1;
-		DsLopMh ds = entityManager.getReference(DsLopMh.class, k);
-		entityManager.remove(ds);
+	public static void xoaSV(String ma_sv, String ma_mh, String lop_mh) {
+		
+		List <DsLopMh> ds = getDs(ma_sv, ma_mh, lop_mh);
+		//int k = .getStt();
+		//DsLopMh ds = entityManager.getReference(DsLopMh.class, k);
+		entityManager.remove(ds.get(0));
 		
 		
 		 
@@ -302,7 +302,75 @@ public class QuanLiSinhVien {
 		th.setNam_kt(nam_kt);
 		entityManager.merge(th);
 		
+	}
+	@SuppressWarnings("unchecked")
+	public static List<phucKhao> getPhucKhao() {
 		
+		String sql = "SELECT p FROM phucKhao p ";
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+		
+	}
+	@SuppressWarnings("unchecked")
+	public static List<phucKhao> getPhucKhao2(String ma_sv) {
+		
+		String sql = "SELECT p FROM phucKhao p WHERE p.ma_sv = '"+ ma_sv +"'";
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+		
+	}
+	@SuppressWarnings("unchecked")
+	public static List<phucKhao> getSttPhucKhao(String ma_sv, String mon_hoc) {
+		
+		String sql = "SELECT p FROM phucKhao p WHERE p.ma_sv = '"+ ma_sv +"' AND p.monhoc = '" + mon_hoc +"'";
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+		
+	}
+	@SuppressWarnings("unchecked")
+	public static List<phucKhao> getSttPhucKhao2() {
+		
+		String sql = "SELECT p FROM phucKhao p";
+		Query query = entityManager.createQuery(sql);
+		return query.getResultList();
+		
+	}
+	public static void updatePhucKhao(String ma_sv, String ho_ten, String mon_hoc, 
+			                         String cot_diem_phuc_khao, String diem_mong_muon, String li_do,String tinh_trang ) {
+		phucKhao pk = new phucKhao();
+		List<phucKhao> dsPhucKhao = getSttPhucKhao2();
+		for(int i = 0 ; i < dsPhucKhao.size(); i++) {
+			
+			if((dsPhucKhao.get(i).getMa_sv().equalsIgnoreCase(ma_sv)) &&
+				dsPhucKhao.get(i).getMon_hoc().equalsIgnoreCase(mon_hoc)) {
+				pk = dsPhucKhao.get(i);
+				break;
+			}	
+		}
+		pk.setStt(pk.getStt());
+		pk.setMa_sv(ma_sv);
+		pk.setHo_ten(ho_ten);
+		pk.setMon_hoc(mon_hoc);
+		pk.setCot_diem_phuc_khao(cot_diem_phuc_khao);
+		pk.setCot_diem_phuc_khao(diem_mong_muon);
+		pk.setLi_do(li_do);
+		pk.setTinh_trang(tinh_trang);
+		entityManager.merge(pk);
+		
+	}
+	public static void createPhucKhao(int stt, String ma_sv, String ho_ten, String mon_hoc, String cot_diem_phuc_khao,
+							   float diem_mong_muon, String li_do ) {
+		
+		phucKhao pk = new phucKhao();
+		pk.setStt(stt);
+		pk.setMa_sv(ma_sv);
+		pk.setHo_ten(ho_ten);
+		pk.setMon_hoc(mon_hoc);
+		pk.setCot_diem_phuc_khao(cot_diem_phuc_khao);
+		pk.setDiem_mong_muon(diem_mong_muon);
+		pk.setLi_do(li_do);
+		pk.setTinh_trang("Chưa xem");
+		entityManager.persist(pk);
 	}
 	//KẾT THÚC -- QUẢN LÝ PHÚC KHẢO
 	

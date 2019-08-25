@@ -203,8 +203,8 @@ public class DanhSachLopMonHoc {
 				String ma_mh = spitted[1].replace(" ", "");
 				String ma_sv = txtMSSV.getText();
 				QuanLiSinhVien.begin();
-				//QuanLiSinhVien.xoaSV(ma_sv, ma_mh, lop_mh);
-				QuanLiSinhVien.xoaSV();
+				QuanLiSinhVien.xoaSV(ma_sv, ma_mh, lop_mh);
+				//QuanLiSinhVien.xoaSV();
 				QuanLiSinhVien.end();
 				loadDanhSachLopMH();
 				
